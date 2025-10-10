@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sushi Place</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0e0e0f;
+      --panel:#0f0f10;
+      --muted:#b7b7b9;
+      --white:#ffffff;
+      --cta:#e4482f;
+      --cta-hover:#d13f29;
+      --card:#141416;
+      --stroke:#222226;
+      --radius:26px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:#ececec;
+      font-family:Inter,system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      color:var(--white);
+      line-height:1.45;
+    }
+
+    .shell{
+      max-width:1060px;
+      margin:28px auto;
+      background:var(--bg);
+      border-radius:38px;
+      overflow:hidden;
+      box-shadow:0 10px 40px rgba(0,0,0,.35);
+      border:1px solid #1b1b1f;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:22px 26px;
+      background:#0c0c0d;
+      border-bottom:1px solid #17171b;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; font-weight:800; font-size:26px;
+    }
+    .brand .logo{
+      width:34px; height:22px; border-radius:999px 999px 8px 8px;
+      background:linear-gradient(#fefefe,#f0f0f0);
+      position:relative; box-shadow:0 2px 0 rgba(0,0,0,.35) inset;
+    }
+    .brand .logo:after{
+      content:""; position:absolute; left:4px; right:4px; bottom:-6px; height:8px;
+      background:#e4482f; border-radius:10px;
+    }
+    .nav a{
+      color:#e9e9ea; text-decoration:none; font-weight:700; margin-left:26px;
+    }
+    .nav a:hover{opacity:.85}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      padding:36px 26px 22px;
+      background:
+        radial-gradient(80% 140% at 0% 0%, #1a1a1e 0, rgba(26,26,30,.4) 60%, transparent 100%),
+        linear-gradient(#0f0f10,#0f0f10);
+      border-bottom:1px solid #17171b;
+    }
+    .hero h1{
+      font-size:48px; margin:0 0 18px; letter-spacing:.2px;
+    }
+    .cta{
+      display:inline-block; background:var(--cta); color:#fff; text-decoration:none;
+      font-weight:700; font-size:20px; padding:16px 22px; border-radius:14px;
+      box-shadow:0 6px 16px rgba(228,72,47,.35);
+    }
+    .cta:hover{background:var(--cta-hover)}
+    .hero-media{
+      display:flex; justify-content:center; align-items:center;
+    }
+    .plate{
+      width:92%; max-width:440px; aspect-ratio:1/1;
+      border-radius:14px;
+      display:grid; place-items:center; padding:18px;
+      box-shadow:inset 0 0 0 1px #1f1f23;
+      background-image:url("hero.png");
+      background-size:cover; background-position:center;
+    }
+
+    .section{
+      padding:28px 26px;
+      border-bottom:1px solid #17171b;
+      background:var(--panel);
+    }
+    .section h2{font-size:34px; margin:0 0 10px}
+    .hours{
+      color:#ddd; font-weight:700; margin:6px 0 22px; font-size:20px;
+    }
+
+    .cards{
+      display:grid; grid-template-columns:repeat(4,1fr); gap:18px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:18px; overflow:hidden;
+      display:flex; flex-direction:column; min-height:210px;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+    }
+    .card img{
+      width:100%; height:150px; object-fit:cover; display:block;
+        transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
+              box-shadow 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    .card:hover img {
+        transform: scale(1.08);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55);
+    }
+    .card .txt{padding:12px 14px; font-weight:800}
+    .card .sub{font-weight:700; color:#cfcfd3}
+
+    .contact{
+      padding:34px 26px 40px;
+      background:var(--panel);
+      border-top:1px solid #17171b;
+      border-bottom:1px solid #17171b;
+    }
+    .contact h2{ font-size:36px; margin:0 0 10px; }
+    .contact .lead{ color:#ddd; margin:0 0 18px; font-weight:600; }
+
+    .contact-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .map-wrap{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+    }
+    .map-wrap iframe{
+      display:block;
+      width:100%;
+      height:522px;
+      border:0;
+      filter: invert(0.9) hue-rotate(180deg) brightness(0.9);
+    }
+
+    .contact-side{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .contact-info{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      padding:16px 18px;
+      font-weight:700;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+    }
+    .contact-info a{ color:#7ec4ff; text-decoration:none; }
+    .muted{ color:#cfcfd3; font-weight:600; }
+
+    .contact-form{
+      background:#121214;
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      padding:16px 18px;
+      display:grid;
+      gap:12px;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+    }
+    .contact-form input,
+    .contact-form textarea{
+      width:100%;
+      background:#0f0f10;
+      color:#fff;
+      border:1px solid #25252a;
+      border-radius:12px;
+      padding:12px 14px;
+      font-family:inherit;
+      font-size:16px;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder{ color:var(--muted); }
+    .contact-form input:focus,
+    .contact-form textarea:focus{
+      border-color:#3a3a42;
+      box-shadow:0 0 0 3px rgba(228,72,47,.25);
+    }
+    .contact-form .cta{
+      background:#007bff;
+      box-shadow:0 6px 16px rgba(0,123,255,.35);
+    }
+    .contact-form .cta:hover{
+      background:#0066d6;
+    }
+
+    .contact-form .privacy{ display:block; margin-top:-4px; font-size:14px; }
+
+    .sr-only{
+      position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+
+    .footer{
+      padding:24px; text-align:center; color:#d3d3d6; background:#0c0c0d;
+      border-top:1px solid #17171b; border-radius:0 0 38px 38px;
+    }
+
+    @media (max-width: 900px){
+      .hero{grid-template-columns:1fr}
+      .hero h1{font-size:38px}
+      .cards{grid-template-columns:repeat(2,1fr)}
+      .contact-grid{grid-template-columns:1fr}
+      .map-wrap iframe{height:340px}
+      .plate{width:100%}
+    }
+    @media (max-width: 480px){
+      .nav{flex-wrap:wrap; gap:10px}
+      .nav .links{width:100%; display:flex; justify-content:flex-end}
+      .hero h1{font-size:32px}
+      .contact h2{font-size:28px}
+      .map-wrap iframe{height:260px}
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <header class="nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+      </div>
+      <nav class="links" aria-label="Main">
+        <a href="menu.html">תפריט</a>
+        <a href="about.html">עלינו</a>
+        <a href="#contact">צור קשר</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>סושי<br>טרי & טעים<br>במשלוח<br>עד הדלת</h1>
+        <a class="cta" href="menu.html">משלוח / איסוף עצמי</a>
+      </div>
+      <div class="hero-media">
+        <div class="plate" role="img" aria-label="Sushi plate image"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>שעות פעילות</h2>
+      <div class="hours">א' - ה' : 11:00 - 23:00</div>
+      <div class="hours">מוצא"ש : 20:30  - 23:00</div>
+
+      <div class="cards">
+        <article class="card">
+          <img src="psf1.jpg" alt="Salmon roll">
+          <div class="txt">סושי מטוגן<br><span class="sub">NINE ספיישלים</span></div>
+        </article>
+        <article class="card">
+          <img src="pms4.jpg" alt="Spicy tuna roll">
+          <div class="txt">מוקפץ סינטה<br><span class="sub">NINE מנות WOK</span></div>
+        </article>
+        <article class="card">
+          <img src="pir3.jpg" alt="Avocado roll">
+          <div class="txt">8 יח' רול רחב עטוף באורז + שומשום • סלמון<br><span class="sub">NINE סושי Insideout 1/0</span></div>
+        </article>
+        <article class="card">
+          <img src="psk2.jpg" alt="California roll">
+          <div class="txt"> סלמון<br><span class="sub">NINE קומבינציות</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <h2>דברו איתנו! אנחנו כאן לכל שאלה ובקשה</h2>
+      <p class="lead">
+        אנו נותנים שירות משלוחים לבאר שבע והסביבה. א'-ה' 11:00–23:00, במוצא"ש  עד 23:00.
+      </p>
+
+      <div class="contact-grid">
+        <div class="map-wrap">
+          <iframe
+            title="מפת המסעדה"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3410.2607897085513!2d34.805349012991925!3d31.268880793349737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x150266f4125dce73%3A0x1af2343800b162b4!2z16jXmdeg15LXnNeR15zXldedIDg2LCDXkdeQ16gg16nXkdeiLCA2NDA5MTUx!5e0!3m2!1siw!2sil!4v1759690852013!5m2!1siw!2sil"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+        <div class="contact-side">
+          <div class="contact-info">
+            <div><strong>טלפון להזמנות:</strong> <a href="tel:0778045342">08-655-4777</a></div>
+            <div><strong>כתובת:</strong>רחוב רינגלבלום 86, באר שבע</div>
+            <div class="muted">לא ניתן לשלוח הזמנות דרך תיבת 'צור קשר'.</div>
+          </div>
+
+          <form class="contact-form" id="contactForm">
+            <label class="sr-only" for="name">שם מלא</label>
+            <input id="name" name="name" type="text" placeholder="שם מלא" required>
+
+            <label class="sr-only" for="phone">מספר טלפון</label>
+            <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="מספר טלפון" required>
+
+            <label class="sr-only" for="msg">הקלד הודעתך כאן</label>
+            <textarea id="msg" name="message" rows="5" placeholder="הקלד הודעתך כאן" required></textarea>
+
+            <input type="text" id="contactHoney" style="display:none">
+
+            <button class="cta" id="sendBtn" type="submit">שלח</button>
+            <small class="privacy muted">הפרטים נשמרים לצורך יצירת קשר בלבד.</small>
+            <p id="formStatus" class="muted" style="margin-top:.25rem"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      © 2024 Sushi Place. All rights reserved.
+    </footer>
+  </main>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRiGa4VyZigNg2HpLXiyeSIjRDcBrR6ezopkF9iCZjWCBdk5Zap-BsypJdVDdHiECEhA/exec";
+
+    const form   = document.getElementById("contactForm");
+    const status = document.getElementById("formStatus");
+    const btn    = document.getElementById("sendBtn");
+    const honey  = document.getElementById("contactHoney");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (honey && honey.value.trim() !== "") return;
+
+      const data = {
+        name:    form.name.value.trim(),
+        phone:   form.phone.value.trim(),
+        message: form.message.value.trim(),
+        referer: location.href
+      };
+
+      if (!data.name || !data.phone || !data.message) {
+        status.textContent = "נא למלא את כל השדות.";
+        return;
+      }
+
+      const old = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "שולח…";
+      status.textContent = "";
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        form.reset();
+        status.textContent = "ההודעה נשלחה! נחזור אליך בהקדם.";
+      } catch (err) {
+        console.error(err);
+        status.textContent = "אירעה שגיאה בשליחה. נסה שוב בעוד רגע.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = old;
+      }
+    });
+  </script>
+</body>
+</html>

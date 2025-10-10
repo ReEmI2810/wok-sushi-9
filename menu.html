@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WOK SUSHI 9 - התפריט</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0e0e0f; --panel:#0f0f10; --muted:#b7b7b9; --white:#ffffff;
+      --cta:#e4482f; --cta-hover:#d13f29; --card:#141416; --stroke:#222226; --radius:26px;
+      --vspace:28px; --hspace:18px;
+    }
+    *{box-sizing:border-box}
+    body{ margin:0; background:#ececec; font-family:Inter,system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif; color:var(--white); line-height:1.45; }
+
+    .shell{ max-width:1060px; margin:28px auto; background:var(--bg); border-radius:38px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.35); border:1px solid #1b1b1f; }
+    .nav{ display:flex;align-items:center;justify-content:space-between; padding:22px 26px;background:#0c0c0d;border-bottom:1px solid #17171b; }
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:26px}
+    .brand .logo{ width:34px;height:22px;border-radius:999px 999px 8px 8px; background:linear-gradient(#fefefe,#f0f0f0); position:relative;box-shadow:0 2px 0 rgba(0,0,0,.35) inset; }
+    .brand .logo:after{ content:"";position:absolute;left:4px;right:4px;bottom:-6px;height:8px;background:#e4482f;border-radius:10px; }
+    .links a{color:#e9e9ea;text-decoration:none;font-weight:700;margin-left:26px}
+    .links a:hover{opacity:.85}
+
+    .page-head{ padding:28px 26px 18px;background:var(--panel);border-bottom:1px solid #17171b; display:flex;align-items:center;justify-content:space-between;gap:16px; }
+    .page-head h1{margin:0;font-size:42px;letter-spacing:.2px}
+    .cta{ display:inline-block;background:var(--cta);color:#fff;text-decoration:none; font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px; box-shadow:0 6px 16px rgba(228,72,47,.35); }
+    .cta:hover{background:var(--cta-hover)}
+
+    .toc{ padding:10px 26px 22px;background:var(--panel);border-bottom:1px solid #17171b; display:flex;flex-wrap:wrap;gap:10px; }
+    .toc a{ text-decoration:none;color:#111;background:#f4c542; padding:8px 12px;border-radius:999px;font-weight:800;font-size:.95rem; border:1px solid #caa220; box-shadow:0 2px 0 rgba(0,0,0,.2); }
+
+    .menu-wrap{padding:26px}
+    .menu-grid{ column-count:2; column-gap:var(--hspace); }
+    @media (max-width:900px){ .menu-grid{ column-count:1 } }
+
+    .menu-card{ display:inline-block; width:100%; background:var(--card); border:1px solid var(--stroke);
+      border-radius:18px; box-shadow:0 6px 18px rgba(0,0,0,.25); padding:16px; margin:0 0 var(--vspace); break-inside:avoid; }
+    .full{ column-span:all; width:100%; display:block; }
+    .menu-title{ font-size:28px;font-weight:800;margin:2px 0 10px; display:flex;align-items:center;gap:10px; }
+    .menu-sub{ color:var(--muted);font-weight:600;margin-bottom:10px }
+    .subhead{
+      display:flex; align-items:center; gap:10px;
+      margin:10px 0 6px; color:#f4c542; font-weight:900;
+    }
+    .subhead::before{ content:""; flex:0 0 8px; height:8px; border-radius:999px; background:#f4c542; }
+
+    .list{ list-style:none;margin:0;padding:0 }
+    .item{ display:grid; grid-template-columns: 1fr auto auto; gap:8px 14px; align-items:center; padding:12px 0; border-bottom:none; }
+    .item:not(.desc){ border-bottom: 1px dashed #2b2b2f; }
+    .item:last-child{ border-bottom:none }
+    .name{ font-weight:800 }
+    .price{ font-weight:900 }
+    .desc{ grid-column:1/-1; color:var(--muted); font-size:.95rem }
+
+    .highlight{ border:1px solid #33323a;background:linear-gradient(180deg,#19191d,#141419); outline:2px solid rgba(244,180,0,.12); position:relative; }
+    .highlight .menu-title::after{ content:"מומלץ"; margin-inline-start:auto; font-size:.8rem;font-weight:900; background:#e4482f;color:#111;padding:2px 8px;border-radius:999px;}
+
+    .info{ padding:22px 26px;background:var(--panel);border-top:1px solid #17171b; display:grid;grid-template-columns:1fr 1fr;gap:16px; }
+    @media (max-width:900px){ .info{grid-template-columns:1fr} }
+    .ibox{ background:#121214;border:1px solid var(--stroke);border-radius:18px;padding:14px 16px; font-weight:700;color:#dcdcdf; }
+    .footer{ padding:24px;text-align:center;color:#d3d3d6;background:#0c0c0d; border-top:1px solid #17171b;border-radius:0 0 38px 38px; }
+
+    .add-btn{ background:#ffd54a;color:#000;border:none;font-weight:800;border-radius:12px;padding:8px 12px;cursor:pointer; }
+    .add-btn[disabled]{opacity:.6;cursor:not-allowed}
+
+    .cart-fab{ position:fixed; inset-inline-end:18px; inset-block-end:18px; background:#e4482f; color:#fff; border:none; border-radius:999px;
+      padding:12px 18px; font-weight:800; box-shadow:0 6px 18px rgba(0,0,0,.35); cursor:pointer; display:flex; align-items:center; gap:10px; z-index:1200 }
+    #cartBadge{ background:#000; color:#ffd54a; border-radius:999px; padding:2px 8px }
+
+    .cart-drawer{ position:fixed; inset-block:0; inset-inline-end:-420px; width:400px; max-width:92vw; background:#141416; color:#fff; box-shadow:-12px 0 30px rgba(0,0,0,.4);
+      display:flex; flex-direction:column; z-index:1400; border-inline-start:1px solid #222226; border-start-start-radius:26px; border-end-start-radius:26px }
+    .cart-drawer.open{ inset-inline-end:0 }
+    .cart-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.35); opacity:0; pointer-events:none; z-index:1300; transition:opacity .25s }
+    .cart-backdrop.show{ opacity:1; pointer-events:auto }
+    .cart-header{ display:flex; justify-content:space-between; align-items:center; padding:16px 18px; border-bottom:1px solid #222226 }
+    .cart-close{ background:transparent; color:#b7b7b9; border:none; font-size:20px; cursor:pointer }
+    .cart-mode{ display:flex; gap:12px; padding:12px 18px; border-bottom:1px solid #222226 }
+    .mode-option{ display:flex; align-items:center; gap:6px; padding:8px 10px; background:#0f0f10; border:1px solid #222226; border-radius:999px; cursor:pointer }
+    .cart-items{ padding:10px; overflow:auto; flex:1 }
+    .cart-item{ display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; padding:12px; background:#0f0f10; border:1px solid #222226; border-radius:16px; margin:10px 6px }
+    .cart-item .title{ font-weight:700 }
+    .cart-item .muted{ color:#b7b7b9; font-size:.9rem }
+    .qty{ display:flex; align-items:center; gap:8px; border:1px solid #222226; border-radius:999px; padding:4px 8px }
+    .qty button{ background:#222226; color:#fff; border:none; width:28px; height:28px; border-radius:999px; cursor:pointer }
+    .row-actions{ display:flex; gap:8px; align-items:center }
+    .edit-btn,.remove-btn{ background:transparent; border:none; color:#ffd54a; cursor:pointer; font-weight:700 }
+    .remove-btn{ color:#e4482f }
+
+    .cart-footer{ border-top:1px solid #222226; padding:14px 18px }
+    .cart-row{ display:flex; justify-content:space-between; margin:.35rem 0 }
+    .cart-row.total{ font-size:1.1rem; font-weight:800 }
+    .checkout-btn{ width:100%; background:#ffd54a; color:#000; font-weight:800; border:none; border-radius:14px; padding:14px; cursor:pointer; margin-top:10px }
+    #minNote{ color:#b7b7b9; font-size:.92rem }
+
+    .modal-wrap{ position:fixed; inset:0; display:none; place-items:center; z-index:1600 }
+    .modal-wrap.show{ display:grid }
+    .modal-bg{ position:absolute; inset:0; background:rgba(0,0,0,.55) }
+    .modal{ position:relative; width:820px; max-width:95vw; background:#141416; border:1px solid #222226; border-radius:26px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.5) }
+    .modal-head{ display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid #222226; font-weight:800 }
+    .modal-body{ display:grid; grid-template-columns:1fr 1fr; gap:16px; padding:16px }
+    @media (max-width:900px){ .modal-body{ grid-template-columns:1fr } }
+    .ph-img{ background:#000; border-radius:18px; height:260px; }
+    .grp{ background:#0f0f10; border:1px solid #222226; border-radius:16px; padding:12px }
+    .grp h4{ margin:0 0 8px }
+    .opt-row{ display:flex; gap:8px; flex-wrap:wrap }
+    .chip{ background:#222226; color:#fff; border:none; border-radius:999px; padding:8px 12px; cursor:pointer }
+    .chip.active{ background:#ffd54a; color:#000; font-weight:800 }
+    .sauce{ border:1px solid #222226; padding:8px 12px; border-radius:999px; cursor:pointer }
+    .sauce.active{ background:#ffd54a; color:#000; font-weight:800 }
+    .qty-ctrl{ display:flex; align-items:center; gap:10px }
+    .qty-ctrl button{ width:34px; height:34px; border-radius:999px; border:none; background:#222226; color:#fff; cursor:pointer }
+    .md-actions{ display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-top:1px solid #222226 }
+    .md-add{ background:#ffd54a; color:#000; border:none; border-radius:12px; padding:12px 16px; font-weight:800; cursor:pointer }
+    .md-cancel{ background:transparent; color:#b7b7b9; border:none; cursor:pointer }
+    .note{ width:100%; background:#0f0f10; color:#fff; border:1px solid #222226; border-radius:12px; padding:10px }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="nav">
+      <div class="brand"><div class="logo" aria-hidden="true"></div></div>
+      <nav class="links" aria-label="Main">
+        <a href="index.html">ראשי</a>
+        <a href="about.html" aria-current="page">עלינו</a>
+        <a href="index.html#contact">צור קשר</a>
+      </nav>
+    </header>
+
+    <section class="page-head">
+      <h1>התפריט שלנו</h1>
+    </section>
+
+    <nav class="toc">
+      <a href="#maki-veg">מאקי צמחוני</a>
+      <a href="#maki-fish">מאקי דגים</a>
+      <a href="#futomaki">פוטומאקי</a>
+      <a href="#insideout">אינסייד־אאוט</a>
+      <a href="#nigiri">ניגירי</a>
+      <a href="#combos">קומבינציות</a>
+      <a href="#party">מגשי ספיישל</a>
+      <a href="#specials">ספיישלים</a>
+      <a href="#salads">סלטים</a>
+      <a href="#starters">ראשונות</a>
+      <a href="#wok">מנות WOK</a>
+      <a href="#rice">עיקריות אורז</a>
+      <a href="#soups">מרקים</a>
+      <a href="#noodles">נודלס / פאד תאי</a>
+      <a href="#business">עסקיות</a>
+      <a href="#drinks">שתייה</a>
+    </nav>
+
+    <section class="menu-wrap">
+      <div class="menu-grid">
+
+        <!-- VEG Maki -->
+        <article id="maki-veg" class="menu-card">
+          <div class="menu-title">NINE סושי מאקי — VEG</div>
+          <div class="menu-sub"></div>
+          <ul class="list">
+            <li class="item"><div class="name">8 יח' • אצה בחוץ</div><div class="price">23 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- Fish Maki -->
+        <article id="maki-fish" class="menu-card">
+          <div class="menu-title">NINE סושי מאקי</div>
+          <ul class="list">
+            <li class="item"><div class="name">מאקי סלמון</div><div class="price">27 ₪</div></li>
+            <li class="item"><div class="name">מאקי טונה</div><div class="price">28 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- Futomaki -->
+        <article id="futomaki" class="menu-card">
+          <div class="menu-title">NINE סושי פוטומאקי</div>
+          <div class="menu-sub">6 יח' רול רחב • אצה בחוץ</div>
+          <ul class="list">
+            <li class="item"><div class="name"> טונה/סלמון: נא או מטוגן + 2 ירקות</div><div class="price">33 ₪</div></li>
+            <li class="item"><div class="name">צמחוני</div><div class="price">28 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- Inside Out -->
+        <article id="insideout" class="menu-card">
+          <div class="menu-title">NINE סושי Insideout 1/0</div>
+          <div class="menu-sub">8 יח' רול רחב עטוף באורז + שומשום </div>
+          <ul class="list">
+            <li class="item"><div class="name"> טונה/סלמון: נא או מטוגן + 2 ירקות ושומשום</div><div class="price">43 ₪</div></li>
+            <li class="item"><div class="name">צמחוני</div><div class="price">38 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- Nigiri -->
+        <article id="nigiri" class="menu-card">
+          <div class="menu-title">NINE סושי ניגירי</div>
+          <ul class="list">
+            <li class="item"><div class="name">2 אצבעות אורז בציפוי טונה / סלמון</div><div class="price">22 ₪</div></li>
+            <li class="item"><div class="name">(VEG) 2 אצבעות אורז בציפוי טמגו / אבוקדו</div><div class="price">19 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- Combos -->
+        <article id="combos" class="menu-card">
+          <div class="menu-title">NINE קומבינציות</div>
+          <ul class="list">
+            <li class="item"><div class="name">צמחונית — 18 יח'</div><div class="price">79 ₪</div></li>
+            <li class="item desc">8 מאקי צמחוני · 8 ספיישל VEG · 2 ניגירי אבוקדו/טמגו</li>
+            <li class="item"><div class="name">סלמון — 22 יח'</div><div class="price">97 ₪</div></li>
+            <li class="item desc">8 מאקי סלמון · 8 פוטומאקי סלמון/אבוקדו/בטטה · 4 סושי סנדוויץ' סלמון · 2 ניגירי סלמון</li>
+            <li class="item"><div class="name">טונה — 26 יח'</div><div class="price">112 ₪</div></li>
+            <li class="item desc">8 מאקי טונה · 8 פוטומאקי טונה/מלפפון/אבוקדו · 8 ספיישל טונה · 2 ניגירי טונה</li>
+            <li class="item"><div class="name">זוגית — 34 יח'</div><div class="price">169 ₪</div></li>
+            <li class="item desc">8 מאקי סלמון · 8 ספיישל מיקס · 6 פוטומאקי טונה/גזר/מלפפון · 8 פוטומאקי סלמון/אבוקדו/בטטה · 2 ניגירי סלמון · 2 ניגירי טונה</li>
+          </ul>
+        </article>
+
+        <!-- Party Trays -->
+        <article id="party" class="menu-card">
+          <div class="menu-title">מגשי מסיבה ספיישל</div>
+          <ul class="list">
+            <li class="item"><div class="name">80 יח' – 5 ספיישל סלמון + 3 ספיישל טונה</div><div class="price">239 ₪</div></li>
+            <li class="item"><div class="name">מגש צמחוני (80 יח')</div><div class="price">199 ₪</div></li>
+            <li class="item"><div class="name">מגש ספיישל צמחוני (80 יח')</div><div class="price">349 ₪</div></li>
+            <li class="item"><div class="name">מגש ספיישל דגים (80 יח')</div><div class="price">389 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- Specials -->
+        <article id="specials" class="menu-card highlight">
+          <div class="menu-title">NINE ספיישלים</div>
+          <ul class="list">
+            <li class="item"><div class="name">ספיישל MIX</div><div class="price">53 ₪</div><div class="desc">סלמון אפוי, אבוקדו, בטטה וקנפיו בציפוי סלמון וטונה אדומה</div></li>
+            <li class="item"><div class="name">ספיישל VEG אבוקדו</div><div class="price">41 ₪</div><div class="desc">אבוקדו, טמגו, גזר ושיטאקי בציפוי אבוקדו</div></li>
+            <li class="item"><div class="name">סנדוויץ' טונה</div><div class="price">47 ₪</div><div class="desc">טונה, אבוקדו ובצל ירוק בציפוי שומשום</div></li>
+            <li class="item"><div class="name">ספיישל סלמון</div><div class="price">53 ₪</div><div class="desc">סלמון נא, אבוקדו, בטטה, גזר ועירית בציפוי סלמון ברוטב ספייסי-מיונז וטריאקי</div></li>
+
+            <li class="item">
+              <div class="name">סושי מטוגן — דג</div>
+              <div class="price">49 ₪</div>
+              <div class="desc">סלמון/טונה, אבוקדו ובטטה</div>
+            </li>
+
+            <li class="item">
+              <div class="name">סושי מטוגן — צמחוני</div>
+              <div class="price">47 ₪</div>
+              <div class="desc">אבוקדו ובטטה</div>
+            </li>
+
+            <li class="item"><div class="name">ספיישל טונה</div><div class="price">53 ₪</div><div class="desc">טונה אדומה, מלפפון, אבוקדו, עירית בציפוי טונה אדומה ומיונז-טריאקי</div></li>
+            <li class="item"><div class="name">ספיישל VEG בטטה</div><div class="price">41 ₪</div><div class="desc">בטטה, קנפיו, טמגו — בציפוי בטטה</div></li>
+            <li class="item"><div class="name">סנדוויץ' סלמון</div><div class="price">44 ₪</div><div class="desc">סלמון, אבוקדו ובצל ירוק בציפוי שומשום</div></li>
+            <li class="item"><div class="name">ספיישל VEG טמגו</div><div class="price">41 ₪</div><div class="desc">מלפפון, גזר, אבוקדו בציפוי טמגו</div></li>
+            <li class="item"><div class="name">סנדוויץ' צמחוני</div><div class="price">41 ₪</div><div class="desc">בטטה, אבוקדו, טמגו בציפוי שומשום — אפשר מטוגן +5 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- Salads -->
+        <article id="salads" class="menu-card">
+          <div class="menu-title">NINE סלטים</div>
+          <div class="menu-sub">מוגש עם 4 יח' סושי צמחוני לבחירת השף</div>
+          <ul class="list">
+            <li class="item"><div class="name">השוק</div><div class="price">39 ₪</div><div class="desc">ירקות לפי בחירת השף, קשיו ואגוזים</div></li>
+            <li class="item"><div class="name">PAPAYA חריף</div><div class="price">46 ₪</div><div class="desc">פפאייה, שרי, גזר, פלפלים חריפים, בצל ירוק, נבטים ובוטנים — חריף במיוחד</div></li>
+            <li class="item"><div class="name">AMIT</div><div class="price">46 ₪</div><div class="desc">מלפפון, כרוב לבן, גזר, בצל ירוק, אטריות ביצים, בוטנים, נבטים ופלפלים ברוטב יושו</div></li>
+            <li class="item"><div class="name">YELLOW TOFU</div><div class="price">46 ₪</div><div class="desc">כרוב לבן, כוסברה, מלפפון, גזר, בצל ירוק, טופו מטוגן ונבטים — רוטב שום תאילנדי</div></li>
+            <li class="item"><div class="name">TOMATO</div><div class="price">46 ₪</div><div class="desc">עלי בייבי, חסה, מלפפון, גמבה, עגבניות שרי (אדום/צהוב) ושרי ספרדי, כרוב, גזר, נבטים, פטריות, קשיו ואגוזים — ויניגרט הדרים אסייתי</div></li>
+          </ul>
+        </article>
+
+        <!-- STARTERS (with gyoza checkboxes in list itself – יישאר; המודל יטפל בבחירה) -->
+        <article id="starters" class="menu-card">
+          <div class="menu-title">ראשונות</div>
+          <ul class="list">
+            <li class="item"><div class="name">אגרול צמחוני</div><div class="price">13 ₪</div></li>
+            <li class="item"><div class="name">אגרול עוף</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">חמוצים יפנים</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">אורז מאודה</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">אדממה</div><div class="price">24 ₪</div></li>
+            <li class="item"><div class="name">מרק מיסו</div><div class="price">23 ₪</div></li>
+            <li class="item"><div class="name">סלט אצות</div><div class="price">23 ₪</div></li>
+
+            <!-- גיוזה בשלושה גדלים -->
+            <li class="item">
+              <div class="name">גיוזה דים סאם (5 יח')</div>
+              <div class="price">35 ₪</div>
+              <div class="desc">ניתן לשלב בין מילויים</div>
+            </li>
+            <li class="item">
+              <div class="name">גיוזה דים סאם (10 יח')</div>
+              <div class="price">65 ₪</div>
+              <div class="desc">ניתן לשלב בין מילויים</div>
+            </li>
+            <li class="item">
+              <div class="name">גיוזה דים סאם (24 יח')</div>
+              <div class="price">132 ₪</div>
+              <div class="desc">ניתן לשלב בין מילויים</div>
+            </li>
+          </ul>
+        </article>
+
+        <!-- WOK -->
+        <article id="wok" class="menu-card">
+          <div class="menu-title">NINE מנות WOK</div>
+          <div class="menu-sub">
+            אטריות ביצים או אורז יסמין עם כרוב, פלפל ובצל ברוטב טריאקי.<br>
+            תוספות: ביצה/פטריות +5 ₪ · עוף/טופו +8 ₪ · סינטה +10 ₪.
+          </div>
+          <ul class="list">
+            <li class="item"><div class="name">מוקפץ ירקות</div><div class="price">45 ₪</div></li>
+            <li class="item"><div class="name">מוקפץ עוף</div><div class="price">50 ₪</div></li>
+            <li class="item"><div class="name">מוקפץ טופו</div><div class="price">50 ₪</div></li>
+            <li class="item"><div class="name">מוקפץ סינטה</div><div class="price">53 ₪</div></li>
+            <li class="item"><div class="name">מוקפץ מיקס</div><div class="price">60 ₪</div></li>
+            <li class="item desc">אפשרות לקבל את המנה מוקפצת עם ירקות.</li>
+          </ul>
+        </article>
+
+        <!-- Rice Mains (קיים פעמיים אצלך; השארתי את הגרסה המלאה עם התיאור) -->
+        <article id="rice" class="menu-card">
+          <div class="menu-title"> עיקריות אורז</div>
+          <div class="menu-sub">כל המנות מוגשות עם אורז מאודה • 53 ₪</div>
+          <ul class="list">
+            <li class="item"><div class="name">שניצל אורז יפני</div><div class="price">53 ₪</div></li>
+            <li class="item desc">אפשרות לקבל את השניצל מוקפץ עם ירקות.</li>
+
+            <li class="item"><div class="name">עוף חמוץ מתוק</div><div class="price">53 ₪</div></li>
+            <li class="item desc">עוף בטמפורה, פלפלים, בצל לבן, אננס, רוטב צ'ילי חמוץ-מתוק.</li>
+
+            <li class="item"><div class="name">עוף בקארי אדום פיקנטי</div><div class="price">53 ₪</div></li>
+            <li class="item desc">פלפל אדום, פטריות, גזר, בצל לבן ובצל ירוק מלמעלה.</li>
+
+            <li class="item"><div class="name">ביף ריס</div><div class="price">53 ₪</div></li>
+            <li class="item desc">רצועות בקר עם בצל לבן, בזיליקום, פלפל אדום, פטריות ובטטה ברוטב טריאקי־ג'ינג'ר־שום.</li>
+          </ul>
+        </article>
+
+        <article id="soups" class="menu-card">
+          <div class="menu-title"> מרקים</div>
+
+          <div class="subhead">מרק טום יאם</div>
+          <ul class="list">
+            <li class="item"><div class="name">צמחוני</div><div class="price">44 ₪</div></li>
+            <li class="item"><div class="name">טופו</div><div class="price">49 ₪</div></li>
+            <li class="item"><div class="name">עוף</div><div class="price">49 ₪</div></li>
+            <li class="item"><div class="name">בקר</div><div class="price">51 ₪</div></li>
+            <li class="item desc">מרק תאילנדי עם ירקות ואטריות אורז, חריפות עדינה.</li>
+          </ul>
+
+          <div class="subhead" style="margin-top:14px">KOREN SOUP</div>
+          <ul class="list">
+            <li class="item"><div class="name"> צמחוני</div><div class="price">44 ₪</div></li>
+            <li class="item"><div class="name"> טופו</div><div class="price">49 ₪</div></li>
+            <li class="item"><div class="name"> עוף</div><div class="price">49 ₪</div></li>
+            <li class="item"><div class="name"> בקר</div><div class="price">51 ₪</div></li>
+            <li class="item desc">מרק קוריאני עשיר עם ירקות טריים ואטריות אורז.</li>
+          </ul>
+        </article>
+
+        <article id="noodles" class="menu-card">
+          <div class="menu-title"> נודלס & פאד תאי</div>
+
+          <div class="subhead">GREEN WOK</div>
+          <ul class="list">
+            <li class="item"><div class="name">צמחוני</div><div class="price">49 ₪</div></li>
+            <li class="item"><div class="name">עוף</div><div class="price">50 ₪</div></li>
+            <li class="item"><div class="name">טופו</div><div class="price">50 ₪</div></li>
+            <li class="item"><div class="name">סינטה</div><div class="price">57 ₪</div></li>
+            <li class="item"><div class="name">מיקס</div><div class="price">64 ₪</div></li>
+            <li class="item desc">ירקות מוקפצים ברוטב קארי ובזיליקום, קרם קוקוס.</li>
+          </ul>
+
+          <div class="subhead" style="margin-top:14px">RED WOK</div>
+          <ul class="list">
+            <li class="item"><div class="name">צמחוני</div><div class="price">49 ₪</div></li>
+            <li class="item"><div class="name">עוף</div><div class="price">50 ₪</div></li>
+            <li class="item"><div class="name">טופו</div><div class="price">50 ₪</div></li>
+            <li class="item"><div class="name">סינטה</div><div class="price">57 ₪</div></li>
+            <li class="item"><div class="name">מיקס</div><div class="price">64 ₪</div></li>
+            <li class="item desc">קארי אדום פיקנטי, קרם קוקוס.</li>
+          </ul>
+
+          <div class="subhead" style="margin-top:14px">PAD THAI</div>
+          <ul class="list">
+            <li class="item"><div class="name">פאד תאי ירקות</div><div class="price">45 ₪</div></li>
+            <li class="item"><div class="name">פאד תאי טופו</div><div class="price">50 ₪</div></li>
+            <li class="item"><div class="name">פאד תאי עוף</div><div class="price">50 ₪</div></li>
+            <li class="item"><div class="name">פאד תאי סינטה</div><div class="price">53 ₪</div></li>
+            <li class="item"><div class="name">פאד תאי מיקס</div><div class="price">60 ₪</div></li>
+            <li class="item desc">אטריות אורז מוקפצות עם כרוב, פלפל גמבה, גזר ובצל, מוגש עם נבטים, בוטנים ולימון.</li>
+          </ul>
+        </article>
+
+        <article id="business" class="menu-card highlight">
+          <div class="menu-title">עסקית</div>
+          <div class="menu-sub">א׳–ה׳ עד 17:00 • 70 ₪</div>
+          <ul class="list">
+            <li class="item desc">כולל: מנה ראשונה + מנה עיקרית / WOK + שתייה. *לא כולל מנות מיקס WOK.</li>
+          </ul>
+        </article>
+
+        <article id="drinks" class="menu-card">
+          <div class="menu-title">NINE שתייה</div>
+          <ul class="list">
+            <li class="item"><div class="name">מים</div><div class="price">10 ₪</div></li>
+            <li class="item"><div class="name">LEO סודה</div><div class="price">10 ₪</div></li>
+            <li class="item"><div class="name">קוקה קולה</div><div class="price">12 ₪</div></li>
+            <li class="item"><div class="name">קולה זירו</div><div class="price">12 ₪</div></li>
+            <li class="item"><div class="name">פאנטה</div><div class="price">12 ₪</div></li>
+            <li class="item"><div class="name">ספרייט</div><div class="price">12 ₪</div></li>
+            <li class="item"><div class="name">פיוזטי</div><div class="price">12 ₪</div></li>
+            <li class="item"><div class="name">LEO בירה</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">סינגה</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">צ'אנג</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">טובורג</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">גולדסטאר</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">קרלסברג</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">היינקין</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">סטלה</div><div class="price">16 ₪</div></li>
+            <li class="item"><div class="name">פריגת תפוזים</div><div class="price">10 ₪</div></li>
+            <li class="item"><div class="name">פריגת לימונדה</div><div class="price">10 ₪</div></li>
+            <li class="item"><div class="name">פריגת אשכוליות</div><div class="price">10 ₪</div></li>
+          </ul>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="info" id="order">
+      <div class="ibox"><strong>שעות פעילות:</strong> א׳–ה׳ 11:00–23:00 · מוצ״ש עד 23:00</div>
+      <div class="ibox"><strong>משלוחים:</strong> באר שבע והסביבה · מינימום הזמנה לפי אזור</div>
+    </section>
+    <footer class="footer">© 2024 Sushi Place. All rights reserved.</footer>
+  </main>
+
+  <button id="cartToggle" class="cart-fab">🛒 <span id="cartBadge">0</span></button>
+  <aside id="cartDrawer" class="cart-drawer" dir="rtl">
+    <header class="cart-header"><strong>העגלה שלי</strong><button id="cartClose" class="cart-close">✕</button></header>
+    <section class="cart-mode">
+      <label class="mode-option"><input type="radio" name="fulfillment" value="pickup" checked> איסוף עצמי</label>
+      <label class="mode-option"><input type="radio" name="fulfillment" value="delivery"> משלוח</label>
+    </section>
+    <div id="cartItems" class="cart-items"></div>
+    <footer class="cart-footer">
+      <div class="cart-row"><span>סכום ביניים</span><span id="subTotal">₪0</span></div>
+      <div class="cart-row" id="deliveryRow" style="display:none"><span>דמי משלוח</span><span id="deliveryFee">₪0</span></div>
+      <div class="cart-row total"><span>לתשלום</span><span id="grandTotal">₪0</span></div>
+      <p id="minNote" style="display:none;margin:8px 0 0">מינימום למשלוח: <b id="minAmount">₪70</b></p>
+      <button id="checkoutBtn" class="checkout-btn">המשך לפרטים</button>
+    </footer>
+  </aside>
+  <div id="cartBackdrop" class="cart-backdrop"></div>
+
+  <div id="modalWrap" class="modal-wrap">
+    <div class="modal-bg"></div>
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-head"><div id="mdTitle">שם מנה</div><button id="mdClose" class="cart-close">✕</button></div>
+      <div class="modal-body">
+        <div class="ph-img" id="mdImg" aria-label="תמונה"></div>
+        <div>
+          <div class="grp" id="grpFish" style="display:none"><h4>סוג דג</h4><div class="opt-row" id="fishRow"></div></div>
+          <div class="grp" id="grpStyle" style="display:none"><h4>סגנון</h4><div class="opt-row" id="styleRow"></div></div>
+          <div class="grp" id="grpRice" style="display:none"><h4>בחירת אורז</h4><div class="opt-row" id="riceRow"></div></div>
+
+          <div class="grp" id="grpVeg" style="display:none"><h4>בחירה (VEG)</h4><div class="opt-row" id="vegRow"></div></div>
+
+          <div class="grp" id="grpExtras" style="display:none">
+            <h4>תוספות (₪3 כל אחד)</h4>
+            <div class="opt-row" id="extrasRow"></div>
+          </div>
+
+          <div class="grp" id="grpSauce" style="display:none"><h4>בחר עד 3 רטבים</h4>
+            <div class="opt-row" id="sauceRow"></div>
+          </div>
+
+          <!-- 🔧 חדש: קבוצת מילויים לגיוזה במודל -->
+          <div class="grp" id="grpFillings" style="display:none">
+            <h4>מילויים לגיוזה</h4>
+            <div class="opt-row" id="fillingsRow"></div>
+          </div>
+
+          <div class="grp"><h4>כמות</h4>
+            <div class="qty-ctrl">
+              <button id="qMinus">−</button><div id="qVal">1</div><button id="qPlus">+</button>
+              <div style="margin-inline-start:auto;font-weight:800">מחיר: <span id="mdPrice">₪0</span></div>
+            </div>
+          </div>
+
+          <div class="grp"><h4>הערות</h4><textarea id="mdNote" class="note" rows="2" placeholder="אלרגיות / העדפות"></textarea></div>
+        </div>
+      </div>
+      <div class="md-actions"><button class="md-cancel" id="mdCancel">ביטול</button><button class="md-add" id="mdAdd">הוסף להזמנה</button></div>
+    </div>
+  </div>
+
+  <script src="menu-data.js"></script>
+
+  <!-- 🔧 חדש: הגדרת SPEC לגיוזה כדי שהמודל ידע להציג מילויים -->
+  <script>
+    window.MENU_SPEC = window.MENU_SPEC || {};
+    const GYOZA_FILLINGS = ['בטטה','פטריות','עוף','בקר','אווז'];
+
+    // המפתח נבנה בקוד כ: `${sectionId}::${baseName}`
+    window.MENU_SPEC["starters::גיוזה דים סאם (5 יח')"]  = { basePrice: 35,  options: { fillings:{ type:'multi', items:GYOZA_FILLINGS } } };
+    window.MENU_SPEC["starters::גיוזה דים סאם (10 יח')"] = { basePrice: 65,  options: { fillings:{ type:'multi', items:GYOZA_FILLINGS } } };
+    window.MENU_SPEC["starters::גיוזה דים סאם (24 יח')"] = { basePrice: 132, options: { fillings:{ type:'multi', items:GYOZA_FILLINGS } } };
+  </script>
+
+  <script>
+    const DELIVERY = { flatFee: 15, freeOver: 180, minimum: 70 };
+
+    const STORAGE_KEY = "CART_V3";
+    const STATE_KEY   = "ORDER_STATE_V1";
+    let CART = load(STORAGE_KEY, []);
+    let ORDER_STATE = load(STATE_KEY, { mode:"pickup" });
+
+    function load(k,def){ try{ return JSON.parse(localStorage.getItem(k)) ?? def }catch{ return def } }
+    function save(k,v){ localStorage.setItem(k, JSON.stringify(v)) }
+    const money = n => "₪" + (Number(n)||0).toLocaleString('he-IL',{maximumFractionDigits:0});
+
+    const els = {
+      toggle: gid('cartToggle'), drawer: gid('cartDrawer'), close: gid('cartClose'), backdrop: gid('cartBackdrop'),
+      items: gid('cartItems'), badge: gid('cartBadge'), sub: gid('subTotal'), fee: gid('deliveryFee'),
+      feeRow: gid('deliveryRow'), grand: gid('grandTotal'), minNote: gid('minNote'), minAmount: gid('minAmount'),
+      checkout: gid('checkoutBtn')
+    };
+    function gid(x){ return document.getElementById(x) }
+    function openCart(){ els.drawer.classList.add('open'); els.backdrop.classList.add('show') }
+    function closeCart(){ els.drawer.classList.remove('open'); els.backdrop.classList.remove('show') }
+    els.toggle.addEventListener('click', openCart);
+    els.close.addEventListener('click', closeCart);
+    els.backdrop.addEventListener('click', closeCart);
+
+    document.querySelectorAll('input[name="fulfillment"]').forEach(r=>{
+      r.checked = r.value === ORDER_STATE.mode;
+      r.addEventListener('change', e=>{ ORDER_STATE.mode = e.target.value; save(STATE_KEY, ORDER_STATE); renderCart(); });
+    });
+
+    function cartSubtotal(){ return CART.reduce((s,i)=> s + i.price*i.qty, 0) }
+    function calcDelivery(sub){ if(ORDER_STATE.mode!=="delivery") return 0; return sub>=DELIVERY.freeOver ? 0 : DELIVERY.flatFee }
+    function meetsMin(sub){ return ORDER_STATE.mode!=="delivery" || sub>=DELIVERY.minimum }
+
+    function renderCart(){
+      els.items.innerHTML = CART.map((it,ix)=>`
+        <div class="cart-item" data-ix="${ix}">
+          <div>
+            <div class="title">${it.name}</div>
+            <div class="muted">${optionsText(it.options)}</div>
+            <div class="muted">${money(it.price)} ליח'</div>
+          </div>
+          <div class="row-actions" style="flex-direction:column;align-items:end">
+            <div class="qty"><button class="dec">−</button><span>${it.qty}</span><button class="inc">+</button></div>
+            <div class="muted">${money(it.price*it.qty)}</div>
+            <div class="row-actions">
+              <button class="edit-btn">ערוך</button>
+              <button class="remove-btn">הסר</button>
+            </div>
+          </div>
+        </div>`).join('');
+
+      els.items.querySelectorAll('.cart-item').forEach(el=>{
+        const ix = Number(el.dataset.ix);
+        el.querySelector('.inc').addEventListener('click', ()=>{ CART[ix].qty++; save(STORAGE_KEY,CART); renderCart(); });
+        el.querySelector('.dec').addEventListener('click', ()=>{ CART[ix].qty--; if(CART[ix].qty<=0) CART.splice(ix,1); save(STORAGE_KEY,CART); renderCart(); });
+        el.querySelector('.remove-btn').addEventListener('click', ()=>{ CART.splice(ix,1); save(STORAGE_KEY,CART); renderCart(); });
+        el.querySelector('.edit-btn').addEventListener('click', ()=> openModal({ mode:'edit', cartIndex:ix, item:CART[ix] }) );
+      });
+
+      const sub = cartSubtotal(), fee = calcDelivery(sub), grand = sub+fee;
+      els.sub.textContent = money(sub); els.fee.textContent = money(fee); els.feeRow.style.display = ORDER_STATE.mode==="delivery"?"":"none";
+      els.grand.textContent = money(grand);
+      els.badge.textContent = CART.reduce((s,i)=>s+i.qty,0);
+      els.minAmount.textContent = "₪"+DELIVERY.minimum;
+      els.minNote.style.display = ORDER_STATE.mode==="delivery"?"":"none";
+      els.checkout.disabled = ORDER_STATE.mode==="delivery" && !meetsMin(sub);
+      els.checkout.textContent = els.checkout.disabled ? "מינימום למשלוח: ₪"+DELIVERY.minimum : "המשך לפרטים";
+    }
+    renderCart();
+
+    els.checkout.addEventListener('click', ()=>{
+      const sub = cartSubtotal(); if(ORDER_STATE.mode==="delivery" && !meetsMin(sub)) return;
+      const payload = { mode:ORDER_STATE.mode, items:CART, subTotal:sub, deliveryFee:calcDelivery(sub), grandTotal:sub+calcDelivery(sub), timestamp:Date.now() };
+      localStorage.setItem("CHECKOUT_PAYLOAD_V1", JSON.stringify(payload));
+      location.href = "checkout.html";
+    });
+
+    function firstNumberInText(txt){ const m = String(txt).replaceAll(',','').match(/(\d+)/); return m ? Number(m[1]) : 0; }
+    function slugify(s){ return String(s).toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g,'').replace(/\s+/g,'-'); }
+
+    document.querySelectorAll('.menu-card').forEach(section=>{
+      const secId = section.id || 'sec';
+      section.querySelectorAll('li.item').forEach(li=>{
+        const nameEl = li.querySelector('.name'); const priceEl = li.querySelector('.price');
+        if(!nameEl) return;
+        const name = nameEl.textContent.trim();
+        const priceBase = priceEl ? firstNumberInText(priceEl.textContent) : 0;
+        const id = `${secId}__${slugify(name)}`;
+        const btn = document.createElement('button');
+        btn.className = 'add-btn'; btn.textContent = 'הוסף להזמנה';
+        btn.addEventListener('click', ()=> openModal({ mode:'add', base:{ id, name, price:priceBase, section:secId } }) );
+        li.appendChild(btn);
+      });
+    });
+
+    const md = {
+      wrap: gid('modalWrap'), title: gid('mdTitle'), price: gid('mdPrice'), note: gid('mdNote'),
+      qVal: gid('qVal'), qPlus: gid('qPlus'), qMinus: gid('qMinus'),
+      grpFish: gid('grpFish'), grpStyle: gid('grpStyle'), grpSauce: gid('grpSauce'),
+      fishRow: gid('fishRow'), styleRow: gid('styleRow'), sauceRow: gid('sauceRow'),
+      grpRice: gid('grpRice'), riceRow: gid('riceRow'),
+      grpVeg: gid('grpVeg'),   vegRow: gid('vegRow'),
+      grpExtras: gid('grpExtras'), extrasRow: gid('extrasRow'),
+      // 🔧 חדש:
+      grpFillings: gid('grpFillings'), fillingsRow: gid('fillingsRow'),
+      add: gid('mdAdd'), cancel: gid('mdCancel'), close: gid('mdClose')
+    };
+    let modalState = null;
+
+    function optionsText(opt){
+      if(!opt) return "";
+      const a=[];
+      if(opt.fish) a.push(opt.fish);
+      if(opt.style) a.push(opt.style);
+      if(opt.rice) a.push("אורז: "+opt.rice);
+      if(opt.veg)  a.push(opt.veg);
+      if(opt.fillings?.length) a.push("מילויים: "+opt.fillings.join(", "));  /* 🔧 חדש */
+      if(opt.sauces?.length) a.push("רטבים: "+opt.sauces.join(", "));
+      if(opt.extras?.length) a.push("תוספות: "+opt.extras.join(", "));
+      if(opt.note) a.push("הערה: "+opt.note);
+      return a.join(" · ");
+    }
+
+    function computeUnitPrice(basePrice, specOpt, sel){
+      let p = basePrice;
+      if(specOpt?.extras?.type==="multi" && sel.extras?.length){
+        p += sel.extras.length * (specOpt.extras.pricePer||0);
+      }
+      if(specOpt?.size?.type==="size" && sel.sizeChoice){
+        const map = specOpt.size.pricesBy||{}; p = (map[sel.sizeChoice] ?? p);
+      }
+      if(specOpt?.kind?.type==="size" && sel.kind){
+        const map = specOpt.kind.pricesBy||{}; p = (map[sel.kind] ?? p);
+      }
+      if(specOpt?.variant?.type==="size" && sel.variant){
+        const map = specOpt.variant.pricesBy||{}; p = (map[sel.variant] ?? p);
+      }
+      if(specOpt?.addOns?.type==="multi" && sel.addOns?.length){
+        p += sel.addOns.length * (specOpt.addOns.pricePer||0);
+      }
+      if(specOpt?.upsize?.type==="size" && sel.upsize){
+        const map = specOpt.upsize.pricesBy||{}; p += (map[sel.upsize] ?? 0);
+      }
+      if(specOpt?.sirloinExtra?.type==="toggle" && sel.sirloinExtra){
+        p += (specOpt.sirloinExtra.price||0);
+      }
+      // fillings ללא תוספת מחיר – אין שינוי
+      return p;
+    }
+
+    function openModal(ctx){
+      modalState = {
+        ctx, qty:1, basePrice:0, price:0, spec: null,
+        options:{ fish:null, style:null, rice:null, veg:null, fillings:[], sauces:[], extras:[], note:"" } // 🔧 fillings חדש
+      };
+
+      let baseName, section, basePrice;
+      if(ctx.mode==='add'){
+        baseName = ctx.base.name; section = ctx.base.section; basePrice = ctx.base.price;
+      } else {
+        const it=ctx.item; baseName=it.name; section=it.section; basePrice=it.basePrice ?? it.price;
+        modalState.qty=it.qty; modalState.options=JSON.parse(JSON.stringify(it.options||{}));
+      }
+
+      const specKey = `${section}::${baseName}`;
+      modalState.spec = (window.MENU_SPEC && window.MENU_SPEC[specKey]) ? window.MENU_SPEC[specKey] : null;
+      if(modalState.spec?.basePrice!=null) basePrice = modalState.spec.basePrice;
+      modalState.basePrice = basePrice;
+
+      md.title.textContent = baseName;
+      md.note.value = modalState.options.note || "";
+      md.qVal.textContent = modalState.qty;
+
+      const specOpt = modalState.spec?.options || {};
+      const showFish     = !!specOpt.fish;
+      const showStyle    = !!specOpt.style;
+      const showRice     = !!specOpt.rice;
+      const showVeg      = !!specOpt.veg;
+      const showExtras   = !!specOpt.extras;
+      const showFillings = !!specOpt.fillings;  // 🔧 חדש
+
+      md.grpFish.style.display     = showFish ? "" : "none";
+      md.grpStyle.style.display    = showStyle? "" : "none";
+      md.grpRice.style.display     = showRice ? "" : "none";
+      md.grpVeg.style.display      = showVeg ? "" : "none";
+      md.grpExtras.style.display   = showExtras ? "" : "none";
+      md.grpFillings.style.display = showFillings ? "" : "none"; // 🔧
+
+      md.fishRow.innerHTML     = showFish     ? specOpt.fish.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
+      md.styleRow.innerHTML    = showStyle    ? specOpt.style.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
+      md.riceRow.innerHTML     = showRice     ? specOpt.rice.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
+      md.vegRow.innerHTML      = showVeg      ? specOpt.veg.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
+      md.extrasRow.innerHTML   = showExtras   ? specOpt.extras.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
+      md.fillingsRow.innerHTML = showFillings ? specOpt.fillings.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : ""; // 🔧
+
+      if(modalState.options.fish)  md.fishRow .querySelectorAll('.chip').forEach(c=>{ if(c.dataset.value===modalState.options.fish) c.classList.add('active') });
+      if(modalState.options.style) md.styleRow.querySelectorAll('.chip').forEach(c=>{ if(c.dataset.value===modalState.options.style) c.classList.add('active') });
+      if(modalState.options.rice)  md.riceRow .querySelectorAll('.chip').forEach(c=>{ if(c.dataset.value===modalState.options.rice) c.classList.add('active') });
+      if(modalState.options.veg)   md.vegRow  .querySelectorAll('.chip').forEach(c=>{ if(c.dataset.value===modalState.options.veg) c.classList.add('active') });
+      if(modalState.options.extras?.length){
+        md.extrasRow.querySelectorAll('.chip').forEach(c=>{ if(modalState.options.extras.includes(c.dataset.value)) c.classList.add('active') });
+      }
+      if(modalState.options.fillings?.length){ // 🔧
+        md.fillingsRow.querySelectorAll('.chip').forEach(c=>{ if(modalState.options.fillings.includes(c.dataset.value)) c.classList.add('active') });
+      }
+
+      const showSauce = section !== 'drinks';
+      md.grpSauce.style.display = showSauce ? "" : "none";
+      if(showSauce){
+        md.sauceRow.innerHTML = (window.SAUCE_LIST||[]).map(v=>`<span class="sauce" data-value="${v}">${v}</span>`).join('');
+        if(modalState.options.sauces?.length){
+          md.sauceRow.querySelectorAll('.sauce').forEach(s=>{ if(modalState.options.sauces.includes(s.dataset.value)) s.classList.add('active') });
+        }
+      } else { md.sauceRow.innerHTML = ""; }
+
+      updatePrice();
+      md.wrap.classList.add('show');
+    }
+    function closeModal(){ md.wrap.classList.remove('show') }
+
+    function readDynamicSelections(){
+      const sauces   = [...md.sauceRow.querySelectorAll('.sauce.active')].map(x=>x.dataset.value);
+      const extras   = [...md.extrasRow.querySelectorAll('.chip.active')].map(x=>x.dataset.value);
+      const fillings = [...md.fillingsRow.querySelectorAll('.chip.active')].map(x=>x.dataset.value); // 🔧
+      return { sauces, extras, fillings };
+    }
+    function updatePrice(){
+      const specOpt = modalState.spec?.options || {};
+      const dynamic = readDynamicSelections();
+      modalState.options = { ...modalState.options, ...dynamic };
+      const unit = computeUnitPrice(modalState.basePrice, specOpt, modalState.options);
+      modalState.price = unit;
+      md.price.textContent = money(unit * modalState.qty);
+    }
+
+    md.qPlus.addEventListener('click', ()=>{ modalState.qty++; md.qVal.textContent=modalState.qty; updatePrice(); });
+    md.qMinus.addEventListener('click', ()=>{ modalState.qty=Math.max(1,modalState.qty-1); md.qVal.textContent=modalState.qty; updatePrice(); });
+
+    md.fishRow.addEventListener('click', e=>{
+      const b=e.target.closest('.chip'); if(!b)return;
+      md.fishRow.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); modalState.options.fish=b.dataset.value; updatePrice();
+    });
+    md.styleRow.addEventListener('click', e=>{
+      const b=e.target.closest('.chip'); if(!b)return;
+      md.styleRow.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); modalState.options.style=b.dataset.value; updatePrice();
+    });
+    md.riceRow.addEventListener('click', e=>{
+      const b=e.target.closest('.chip'); if(!b)return;
+      md.riceRow.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); modalState.options.rice=b.dataset.value; updatePrice();
+    });
+    md.vegRow.addEventListener('click', e=>{
+      const b=e.target.closest('.chip'); if(!b)return;
+      md.vegRow.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); modalState.options.veg=b.dataset.value; updatePrice();
+    });
+    md.extrasRow.addEventListener('click', e=>{
+      const b=e.target.closest('.chip'); if(!b)return;
+      b.classList.toggle('active'); updatePrice();
+    });
+    // 🔧 חדש: מילויים – בחירה מרובה
+    md.fillingsRow.addEventListener('click', e=>{
+      const b=e.target.closest('.chip'); if(!b)return;
+      b.classList.toggle('active'); updatePrice();
+    });
+
+    md.sauceRow.addEventListener('click', e=>{
+      const s=e.target.closest('.sauce'); if(!s)return;
+      if(s.classList.contains('active')) s.classList.remove('active');
+      else{
+        const actives = md.sauceRow.querySelectorAll('.sauce.active').length;
+        if(actives>=3) return;
+        s.classList.add('active');
+      }
+      updatePrice();
+    });
+
+    md.note.addEventListener('input', e=> modalState.options.note=e.target.value.trim());
+
+    md.add.addEventListener('click', ()=>{
+      const displayName = modalState.ctx.mode==='add' ? modalState.ctx.base.name : modalState.ctx.item.name;
+      const section     = modalState.ctx.mode==='add' ? modalState.ctx.base.section : modalState.ctx.item.section;
+
+      if(modalState.ctx.mode==='add'){
+        CART.push({
+          id:`${section}__${displayName}`,
+          name: displayName,
+          section,
+          basePrice: modalState.basePrice,
+          price: modalState.price,
+          qty: modalState.qty,
+          options: modalState.options
+        });
+      }else{
+        const ix=modalState.ctx.cartIndex;
+        CART[ix].qty=modalState.qty;
+        CART[ix].options=modalState.options;
+        CART[ix].price = modalState.price;
+        CART[ix].basePrice = modalState.basePrice;
+      }
+      save(STORAGE_KEY,CART); closeModal(); renderCart(); openCart();
+    });
+
+    md.cancel.addEventListener('click', closeModal);
+    md.close.addEventListener('click', closeModal);
+    document.querySelector('#modalWrap .modal-bg').addEventListener('click', closeModal);
+  </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>תשלום — WOK SUSHI 9</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#0e0e0f;color:#fff;font-family:Inter,system-ui}
+    .wrap{max-width:520px;margin:40px auto;background:#141416;border:1px solid #222226;border-radius:18px;padding:18px}
+    h1{margin:0 0 10px}
+    .muted{color:#b7b7b9}
+    .row{display:flex;justify-content:space-between;margin:8px 0}
+    button{width:100%;background:#ffd54a;color:#000;border:none;border-radius:12px;padding:12px;font-weight:800;cursor:pointer;margin-top:10px}
+    .link{display:inline-block;margin-top:8px;color:#ffd54a;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>תשלום מאובטח</h1>
+    <div class="row"><span>מס׳ הזמנה</span><span id="oid">—</span></div>
+    <div class="row"><span>לתשלום</span><span id="amt">₪0</span></div>
+    <p class="muted">דף זה הוא סימולציה. בהטמעה אמיתית תופנו למסך תשלום של ספק הסליקה.</p>
+    <button id="payBtn">שלם עכשיו</button>
+    <a class="link" href="checkout.html">← חזרה</a>
+    <div id="msg" class="muted" style="margin-top:8px"></div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzP0-N9mFWYleC1sTZy_LDoyrvGgRx08VClUV9Z2qbdqh7LBMLMCdjdc_PqdUfH6MXo_w/exec'; // אותו URL כמו ב-checkout
+    const p = new URLSearchParams(location.search);
+    const order_id = p.get('order_id') || localStorage.getItem('ORDER_ID') || '';
+    const amount = p.get('amount') || localStorage.getItem('ORDER_AMOUNT') || '0';
+    document.getElementById('oid').textContent = order_id || '—';
+    document.getElementById('amt').textContent = "₪" + Number(amount||0).toLocaleString('he-IL');
+
+    document.getElementById('payBtn').addEventListener('click', async ()=>{
+      const btn = document.getElementById('payBtn'); const msg = document.getElementById('msg');
+      btn.disabled = true; btn.textContent = 'מעבד תשלום…';
+      try{
+        const fd = new FormData();
+        fd.append('action','order:paid');
+        fd.append('order_id', order_id);
+        fd.append('amount', amount);
+        const res = await fetch(SCRIPT_URL, { method:'POST', body: fd });
+        const data = await res.json();
+        if(!data.ok) throw new Error(data.error || 'שגיאה');
+
+        // הצלחה → דף תודה
+        location.href = `success.html?order_id=${encodeURIComponent(order_id)}`;
+      }catch(err){
+        msg.textContent = 'התשלום נכשל. אפשר לנסות שוב.';
+        btn.disabled = false; btn.textContent = 'שלם עכשיו';
+        // כשלון → דף כשלון
+        // location.href = `failed.html?order_id=${encodeURIComponent(order_id)}`;
+      }
+    });
+  </script>
+</body>
+</html>

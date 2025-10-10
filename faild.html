@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>התשלום נכשל — WOK SUSHI 9</title>
+  <style>
+    body{margin:0;background:#0e0e0f;color:#fff;font-family:Inter,system-ui}
+    .wrap{max-width:520px;margin:40px auto;background:#141416;border:1px solid #222226;border-radius:18px;padding:18px;text-align:center}
+    a{color:#ffd54a;text-decoration:none;font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>התשלום נכשל</h1>
+    <p>מס׳ הזמנה: <b id="oid">—</b></p>
+    <p>אפשר לנסות שוב או ליצור קשר.</p>
+    <p><a href="checkout.html">← חזרה ל-Checkout</a></p>
+  </div>
+  <script>
+    const p = new URLSearchParams(location.search);
+    document.getElementById('oid').textContent = p.get('order_id') || '—';
+  </script>
+</body>
+</html>

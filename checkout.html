@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout — WOK SUSHI 9</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0e0e0f; --panel:#0f0f10; --muted:#b7b7b9; --white:#ffffff;
+      --cta:#e4482f; --cta-hover:#d13f29; --card:#141416; --stroke:#222226; --radius:26px;
+    }
+    *{box-sizing:border-box}
+    body{ margin:0; background:#ececec; font-family:Inter,system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif; color:var(--white); }
+    .shell{ max-width:1060px; margin:28px auto; background:var(--bg); border-radius:38px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.35); border:1px solid #1b1b1f; }
+    .nav{ display:flex;align-items:center;justify-content:space-between; padding:22px 26px;background:#0c0c0d;border-bottom:1px solid #17171b; }
+    .links a{color:#e9e9ea;text-decoration:none;font-weight:700;margin-left:26px}
+    .links a:hover{opacity:.85}
+    .page-head{ padding:24px 26px;background:var(--panel);border-bottom:1px solid #17171b; display:flex;align-items:center;justify-content:space-between;gap:16px; }
+    h1{margin:0;font-size:34px}
+    .wrap{ display:grid; grid-template-columns: 2fr 1.2fr; gap:18px; padding:22px; }
+    @media (max-width:900px){ .wrap{ grid-template-columns:1fr } }
+    .card{ background:#141416; border:1px solid var(--stroke); border-radius:18px; padding:16px; }
+    .card h3{ margin:0 0 10px; }
+    label{ display:block; font-weight:700; margin:12px 0 6px }
+    input, textarea, select{
+      width:100%; background:#0f0f10; color:#fff; border:1px solid #222226; border-radius:12px; padding:10px 12px; font-size:1rem;
+    }
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
+    .muted{ color:var(--muted); font-size:.95rem }
+    .order-line{ display:grid; grid-template-columns: 1fr auto; gap:8px; padding:10px 0; border-bottom:1px dashed #2b2b2f }
+    .order-line:last-child{ border-bottom:none }
+    .sum-row{ display:flex; justify-content:space-between; margin:.35rem 0 }
+    .sum-row.total{ font-weight:800; font-size:1.1rem }
+    .btn{ width:100%; background:#ffd54a; color:#000; font-weight:800; border:none; border-radius:14px; padding:14px; cursor:pointer; margin-top:10px }
+    .back{ display:inline-block; margin:0 0 8px; color:#ffd54a; text-decoration:none; font-weight:700 }
+    .badge{ display:inline-block; background:#222226; border:1px solid #2a2a2f; border-radius:999px; padding:2px 10px; margin-inline-start:8px }
+    .radio-row{ display:flex; gap:10px; flex-wrap:wrap }
+    .radio-pill{ display:flex; align-items:center; gap:8px; padding:8px 12px; background:#0f0f10; border:1px solid #222226; border-radius:999px; cursor:pointer; }
+    .hint{ font-size:.92rem; color:#c9c9cc; margin-top:6px }
+    .danger{ color:#ff6b6b }
+    .ok{ color:#8ce99a }
+    .sep{ height:1px; background:#222226; margin:10px 0 }
+    .footer{ padding:16px 22px; text-align:center; color:#d0d0d3; background:#0c0c0d; border-top:1px solid #17171b; border-radius:0 0 38px 38px }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="nav">
+      <div></div>
+      <nav class="links"><a href="index.html">ראשי</a> <a href="about.html">עלינו</a></nav>
+    </header>
+
+    <section class="page-head">
+      <h1>Checkout — תשלום ואישור הזמנה</h1>
+      <a class="back" href="index.html">← חזרה לתפריט</a>
+    </section>
+
+    <section class="wrap">
+      <!-- פרטי לקוח -->
+      <form id="checkoutForm" class="card" novalidate>
+        <h3>פרטי לקוח ואיסוף/משלוח</h3>
+
+        <div class="radio-row" style="margin-bottom:6px">
+          <label class="radio-pill"><input type="radio" name="mode" value="pickup"> איסוף עצמי</label>
+          <label class="radio-pill"><input type="radio" name="mode" value="delivery"> משלוח</label>
+          <span id="minMsg" class="hint"></span>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>שם מלא</label>
+            <input name="fullName" required placeholder="לדוגמה: אמיר כהן">
+          </div>
+          <div>
+            <label>טלפון</label>
+            <input name="phone" required inputmode="tel" placeholder="05x-xxxxxxx">
+          </div>
+        </div>
+
+        <label>אימייל לקבלת קבלה</label>
+        <input type="email" name="email" required placeholder="name@example.com">
+
+        <div id="addrWrap" style="display:none">
+          <div class="row">
+            <div>
+              <label>עיר</label>
+              <input name="city" placeholder="לדוגמה: באר שבע">
+            </div>
+            <div>
+              <label>רחוב ומספר</label>
+              <input name="street" placeholder="רח׳… 10">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>קומה / דירה</label>
+              <input name="apt" placeholder="(לא חובה)">
+            </div>
+            <div>
+              <label>הערות לשליח</label>
+              <input name="courierNote" placeholder="שער, קוד, כניסה…">
+            </div>
+          </div>
+        </div>
+
+        <label>הערות להזמנה</label>
+        <textarea name="notes" rows="2" placeholder="ללא ג׳ינג׳ר/וסאבי? אלרגיות?"></textarea>
+
+        <div class="sep"></div>
+        <label><input type="checkbox" id="agree" required> מאשר/ת את פרטי ההזמנה ותנאי השירות</label>
+        <button class="btn" type="submit">לתשלום מאובטח</button>
+        <div id="formMsg" class="hint"></div>
+
+        <!-- יישלח לשרת -->
+        <textarea name="cartJson" id="cartJson" hidden></textarea>
+        <input type="hidden" name="action" value="order:create">
+      </form>
+
+      <!-- סיכום הזמנה -->
+      <aside class="card">
+        <h3>סיכום הזמנה <span id="badgeCount" class="badge">0</span></h3>
+        <div id="orderList"></div>
+        <div class="sep"></div>
+        <div class="sum-row"><span>סכום ביניים</span><span id="sumSub">₪0</span></div>
+        <div class="sum-row" id="sumDeliveryRow" style="display:none"><span>דמי משלוח</span><span id="sumDelivery">₪0</span></div>
+        <div class="sum-row total"><span>לתשלום</span><span id="sumGrand">₪0</span></div>
+        <div class="hint" id="freeShipHint" style="display:none"></div>
+      </aside>
+    </section>
+
+    <footer class="footer">© 2024 WOK SUSHI 9</footer>
+  </main>
+
+  <script>
+    // ==== קונפיג ====
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzP0-N9mFWYleC1sTZy_LDoyrvGgRx08VClUV9Z2qbdqh7LBMLMCdjdc_PqdUfH6MXo_w/exec';
+    const DELIVERY = { flatFee: 15, freeOver: 180, minimum: 70 };
+
+    // ==== טעינת עגלה מהמסך הקודם ====
+    const payload = JSON.parse(localStorage.getItem("CHECKOUT_PAYLOAD_V1") || "null");
+    if(!payload || !Array.isArray(payload.items) || payload.items.length===0){
+      alert("העגלה ריקה. נחזור לתפריט.");
+      location.href = "index.html";
+    }
+
+    const els = {
+      orderList: document.getElementById('orderList'),
+      badge: document.getElementById('badgeCount'),
+      sub: document.getElementById('sumSub'),
+      dRow: document.getElementById('sumDeliveryRow'),
+      dFee: document.getElementById('sumDelivery'),
+      grand: document.getElementById('sumGrand'),
+      hint: document.getElementById('freeShipHint'),
+      minMsg: document.getElementById('minMsg'),
+      form: document.getElementById('checkoutForm'),
+      cartJson: document.getElementById('cartJson'),
+      addrWrap: document.getElementById('addrWrap'),
+      agree: document.getElementById('agree'),
+      msg: document.getElementById('formMsg')
+    };
+
+    const money = n => "₪" + (Number(n)||0).toLocaleString('he-IL',{maximumFractionDigits:0});
+    const items = payload.items;
+    let mode = (payload.mode || "pickup"); // pickup | delivery
+
+    // מגדיר מצב רדיו
+    document.querySelectorAll('input[name="mode"]').forEach(r=>{
+      r.checked = r.value === mode;
+      r.addEventListener('change', e => { mode = e.target.value; renderSummary(); toggleAddress(); });
+    });
+
+    function toggleAddress(){
+      const isDel = mode==="delivery";
+      els.addrWrap.style.display = isDel ? "" : "none";
+      els.minMsg.innerHTML = isDel ? `מינימום משלוח: <b>${money(DELIVERY.minimum)}</b>` : '';
+    }
+
+    function renderSummary(){
+      const qty = items.reduce((s,i)=>s+i.qty,0);
+      els.badge.textContent = qty;
+
+      els.orderList.innerHTML = items.map(it => `
+        <div class="order-line">
+          <div>
+            <div style="font-weight:700">${it.name} × ${it.qty}</div>
+            <div class="muted" style="font-size:.92rem">${optionsText(it.options)}</div>
+          </div>
+          <div style="font-weight:800">${money(it.price * it.qty)}</div>
+        </div>
+      `).join('');
+
+      const sub = items.reduce((s,i)=> s + (i.price*i.qty), 0);
+      const dFee = mode==="delivery" ? (sub>=DELIVERY.freeOver ? 0 : DELIVERY.flatFee) : 0;
+      const grand = sub + dFee;
+
+      els.sub.textContent = money(sub);
+      els.dRow.style.display = mode==="delivery" ? "" : "none";
+      els.dFee.textContent = money(dFee);
+      els.grand.textContent = money(grand);
+
+      if(mode==="delivery"){
+        const remain = Math.max(0, DELIVERY.freeOver - sub);
+        els.hint.style.display = remain>0 ? "" : "none";
+        els.hint.textContent = remain>0 ? `חסר לך ${money(remain)} למשלוח חינם` : "משלוח חינם!";
+      }else{
+        els.hint.style.display = "none";
+      }
+    }
+
+    function optionsText(opt){
+      if(!opt) return "";
+      const a=[];
+      if(opt.fish) a.push(opt.fish);
+      if(opt.style) a.push(opt.style);
+      if(opt.rice) a.push("אורז: "+opt.rice);
+      if(opt.veg)  a.push(opt.veg);
+      if(opt.sauces?.length) a.push("רטבים: "+opt.sauces.join(", "));
+      if(opt.extras?.length) a.push("תוספות: "+opt.extras.join(", "));
+      if(opt.note) a.push("הערה: "+opt.note);
+      return a.join(" · ");
+    }
+
+    toggleAddress();
+    renderSummary();
+
+    // שליחת הזמנה ל-Apps Script
+    els.form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      els.msg.textContent = "";
+
+      // ולידציה מינימום משלוח
+      const sub = items.reduce((s,i)=> s + (i.price*i.qty), 0);
+      if(mode==="delivery" && sub < DELIVERY.minimum){
+        els.msg.innerHTML = `<span class="danger">מינימום הזמנה למשלוח הוא ${money(DELIVERY.minimum)}.</span>`;
+        return;
+      }
+      if(!els.agree.checked){
+        els.msg.innerHTML = `<span class="danger">יש לאשר את תנאי השירות.</span>`;
+        return;
+      }
+
+      const fd = new FormData(els.form);
+      // מרכיב אובייקט עגלה מלא לשרת
+      const orderCart = {
+        items,
+        currency: 'ILS',
+        delivery: { mode, fee: (mode==="delivery" ? (sub>=DELIVERY.freeOver ? 0 : DELIVERY.flatFee) : 0) },
+      };
+
+      // כתובת למשלוח (אם צריך)
+      if(mode==="delivery"){
+        orderCart.address = {
+          city:   els.form.city.value.trim(),
+          street: els.form.street.value.trim(),
+          apt:    els.form.apt.value.trim(),
+          note:   els.form.courierNote.value.trim()
+        };
+      }
+
+      els.cartJson.value = JSON.stringify(orderCart);
+
+      // UI
+      const btn = els.form.querySelector('button[type="submit"]');
+      const old = btn.textContent; btn.disabled = true; btn.textContent = "יוצר הזמנה…";
+
+      try{
+        const res = await fetch(SCRIPT_URL, { method:'POST', body: fd });
+        const data = await res.json(); // { ok, order_id, amount, pay_url? , error? }
+
+        if(!data.ok){
+          throw new Error(data.error || 'שגיאה');
+        }
+
+        // שמור לזיכרון לשלב התשלום
+        localStorage.setItem("ORDER_ID", data.order_id);
+        localStorage.setItem("ORDER_AMOUNT", String(data.amount));
+
+        // ניתוב לתשלום
+        if(data.pay_url){
+          location.href = data.pay_url; // ספק סליקה החזיר קישור
+        }else{
+          // סימולציית תשלום פנימית
+          location.href = `pay.html?order_id=${encodeURIComponent(data.order_id)}&amount=${encodeURIComponent(data.amount)}`;
+        }
+
+      }catch(err){
+        console.error(err);
+        els.msg.innerHTML = `<span class="danger">לא ניתן ליצור הזמנה כרגע. נסו שוב.</span>`;
+        btn.disabled = false; btn.textContent = old;
+      }
+    });
+  </script>
+</body>
+</html>
