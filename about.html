@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>עלינו — Sushi Place</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0e0e0f;
+      --panel:#0f0f10;
+      --muted:#b7b7b9;
+      --white:#ffffff;
+      --cta:#e4482f;
+      --cta-hover:#d13f29;
+      --card:#141416;
+      --stroke:#222226;
+      --radius:26px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:#ececec;
+      font-family:Inter,system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      color:var(--white);
+      line-height:1.45;
+    }
+
+    .shell{
+      max-width:1060px;
+      margin:28px auto;
+      background:var(--bg);
+      border-radius:38px;
+      overflow:hidden;
+      box-shadow:0 10px 40px rgba(0,0,0,.35);
+      border:1px solid #1b1b1f;
+    }
+
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:22px 26px; background:#0c0c0d; border-bottom:1px solid #17171b;
+    }
+    .brand{ display:flex; align-items:center; gap:12px; font-weight:800; font-size:26px; }
+    .brand .logo{
+      width:34px; height:22px; border-radius:999px 999px 8px 8px;
+      background:linear-gradient(#fefefe,#f0f0f0);
+      position:relative; box-shadow:0 2px 0 rgba(0,0,0,.35) inset;
+    }
+    .brand .logo:after{
+      content:""; position:absolute; left:4px; right:4px; bottom:-6px; height:8px;
+      background:#e4482f; border-radius:10px;
+    }
+    .nav a{ color:#e9e9ea; text-decoration:none; font-weight:700; margin-left:26px; opacity:.9 }
+    .nav a:hover{opacity:1}
+    .nav a[aria-current="page"]{ color:#fff; position:relative; }
+    
+.masonry{
+  columns: 3;
+  column-gap: 14px;
+}
+@media (max-width: 900px){ .masonry{ columns: 2 } }
+@media (max-width: 520px){ .masonry{ columns: 1 } }
+
+.tile{
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 14px; 
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--stroke);
+  background: var(--card);
+  break-inside: avoid; 
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+
+.tile img{
+    width: 100%; height: auto; display: block;
+    transition: transform .45s ease, filter .45s ease;
+  }
+
+  .tile::after{
+    content: attr(data-title);
+    position: absolute; inset: 0;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: 16px;
+    text-align: center; font-weight: 800; letter-spacing:.2px;
+    color: #fff; opacity: 0; transform: translateY(8px);
+    background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%);
+    transition: opacity .25s ease, transform .25s ease;
+    pointer-events: none;
+  }
+
+  .tile:hover img{ transform: scale(1.04); filter: brightness(.92) }
+  .tile:hover::after,
+  .tile:focus-within::after{ opacity: 1; transform: translateY(0) }
+  .tile:active::after{ opacity: 1 }
+
+    .hero{
+      display:grid; grid-template-columns:1.1fr .9fr; gap:14px;
+      padding:36px 26px 22px;
+      background:
+        radial-gradient(80% 140% at 0% 0%, #1a1a1e 0, rgba(26,26,30,.4) 60%, transparent 100%),
+        linear-gradient(#0f0f10,#0f0f10);
+      border-bottom:1px solid #17171b;
+    }
+    .hero h1{ font-size:42px; margin:0 0 10px; letter-spacing:.2px; }
+    .hero p{ color:#d6d6d9; margin:0 0 18px; font-weight:600; }
+    .cta{
+      display:inline-block; background:var(--cta); color:#fff; text-decoration:none;
+      font-weight:700; font-size:18px; padding:14px 18px; border-radius:14px;
+      box-shadow:0 6px 16px rgba(228,72,47,.35); transition:background .2s ease;
+    }
+    .cta:hover{ background:var(--cta-hover) }
+
+    .hero-media{ display:flex; justify-content:center; align-items:center; }
+    .plate{
+      width:92%; max-width:440px; aspect-ratio:1/1; border-radius:14px;
+      display:grid; place-items:center; padding:18px;
+      box-shadow:inset 0 0 0 1px #1f1f23;
+      background-image:url("about-hero.jpg"); 
+      background-size:cover; background-position:center;
+      filter:brightness(.92) contrast(1.04);
+    }
+
+    .section{
+      padding:28px 26px; border-bottom:1px solid #17171b; background:var(--panel);
+    }
+    .section h2{ font-size:34px; margin:0 0 10px }
+    .lead{ color:#cfcfd3; font-weight:600; margin:0 0 10px }
+
+    .gallery{
+      display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:18px;
+    }
+    .dish{
+      background:var(--card); border:1px solid var(--stroke);
+      border-radius:18px; overflow:hidden; display:flex; flex-direction:column; min-height:210px;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+    }
+    .dish img{
+      width:100%; height:150px; object-fit:cover; display:block;
+      transition: transform .6s cubic-bezier(.25,.1,.25,1), box-shadow .6s cubic-bezier(.25,.1,.25,1);
+    }
+    .dish:hover img{ transform:scale(1.06); box-shadow:0 10px 25px rgba(0,0,0,.55) }
+    .dish .txt{ padding:12px 14px; font-weight:800 }
+    .dish .sub{ font-weight:700; color:#cfcfd3 }
+
+    .cta-row{
+      display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;
+    }
+    .btn-ghost{
+      display:inline-block; text-decoration:none; font-weight:700; padding:12px 16px;
+      border-radius:14px; background:#101013; border:1px solid #232327; color:#e9e9ea;
+    }
+    .btn-ghost:hover{ background:#141418 }
+
+    .footer{
+      padding:24px; text-align:center; color:#d3d3d6; background:#0c0c0d;
+      border-top:1px solid #17171b; border-radius:0 0 38px 38px;
+    }
+
+    :root{
+      --jg-row: 260px;
+      --jg-gap: 10px;
+    }
+    @media (max-width: 900px){ :root{ --jg-row: 200px } }
+    @media (max-width: 520px){ :root{ --jg-row: 160px } }
+
+    .justified-gallery{
+      position: relative;
+      width: 100%;
+      line-height: 0;
+      background: var(--panel);
+      padding-top: 6px;
+    }
+    .j-row{
+      display: flex;
+      gap: var(--jg-gap);
+      margin: 0 0 var(--jg-gap) 0;
+    }
+    .j-item{
+      position: relative;
+      display: block;
+      overflow: hidden;
+      border-radius: 0px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      background: var(--card);
+    }
+    .j-item img{
+      display: block;
+      width: 100%;
+      height: var(--jg-row);
+      object-fit: cover;
+      transition: transform .35s ease, filter .35s ease;
+    }
+    .j-item:hover img{
+      transform: scale(1.035);
+      filter: brightness(.95);
+    }
+
+    .j-item::after{
+      content: attr(data-title);
+      position: absolute; inset: 0;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding: 14px;
+      font-weight: 800; color: #fff; letter-spacing:.2px;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%);
+      opacity: 0; transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease;
+      text-align: center; pointer-events: none;
+    }
+    .j-item:hover::after{ opacity: 1; transform: translateY(0) }
+
+    @media (max-width: 900px){
+      .hero{grid-template-columns:1fr}
+      .hero h1{font-size:34px}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+      .plate{width:100%}
+    }
+    @media (max-width: 480px){
+      .nav{flex-wrap:wrap; gap:10px}
+      .nav .links{width:100%; display:flex; justify-content:flex-end}
+      .hero h1{font-size:30px}
+      .gallery{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+      </div>
+      <nav class="links" aria-label="Main">
+        <a href="index.html">ראשי</a>
+        <a href="menu.html">תפריט</a>
+        <a href="index.html#contact" aria-current="page">צור קשר</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>עלינו</h1>
+        <p class="lead">
+          "אסייתי עם סיפור של תשוקה ונשמה! 🍣🔥 חוויית אוכל אסייתי אותנטי עם סושי טרי, ווק טעים ומנות ייחודיות במחירים משתלמים. באווירה משפחתית חמה, עם הופעות חיות שיעשו לכם את הערב. הצטרפו אלינו לחוויה טעימה ומיוחדת!"
+
+        </p>
+        <p class="lead">מוזמנים להציץ בגלריה של מנות שהכנו לאחרונה, ולהרגיש את האופי של המקום.</p>
+      </div>
+      <div class="hero-media">
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>גלריית מנות</h2>
+      <p class="lead">טעימה מהדברים שאנחנו הכי אוהבים לגלגל ולהגיש.</p>
+
+        <div class="masonry">
+          <figure class="tile" data-title="עיקריות אורז - עוף בקארי אדום פיקנטי">
+            <img src="images/roll1.jpg" alt="עיקריות אורז - עוף בקארי אדום פיקנטי">
+          </figure>
+
+          <figure class="tile" data-title="NINE ספיישלים - סנדוויץ' סלמון">
+            <img src="images/roll2.jpg" alt="NINE ספיישלים - סנדוויץ' סלמון">
+          </figure>
+
+          <figure class="tile" data-title="NINE מנות WOK - מוקפץ סינטה">
+            <img src="images/roll3.jpg" alt="NINE מנות WOK - מוקפץ סינטה">
+          </figure>
+
+          <figure class="tile" data-title="NINE סושי מאקי - מאקי סלמון">
+            <img src="images/roll4.jpg" alt="NINE סושי מאקי - מאקי סלמון">
+          </figure>
+
+          <figure class="tile" data-title="NINE סלטים - TOMATO">
+            <img src="images/roll5.jpg" alt="NINE סלטים - TOMATO">
+          </figure>
+
+          <figure class="tile" data-title="NINE ספיישלים - ספיישל MIX">
+            <img src="images/roll8.jpg" alt="NINE ספיישלים - ספיישל MIX">
+          </figure>
+
+          <figure class="tile" data-title="NINE קומבינציות - סלמון">
+            <img src="images/roll6.jpg" alt="פילדלפיה — סלמון וגבינת שמנת">
+          </figure>
+
+          <figure class="tile" data-title="עסקית">
+            <img src="images/roll7.jpg" alt="עסקית">
+          </figure>
+          <figure class="tile" data-title="NINE מנות WOK - מוקפץ מיקס">
+            <img src="images/roll9.jpg" alt="NINE מנות WOK - מוקפץ מיקס">
+          </figure>
+        </div>
+
+    </section>
+
+    <footer class="footer">
+      © 2024 Sushi Place. All rights reserved.
+    </footer>
+  </main>
+</body>
+</html>
