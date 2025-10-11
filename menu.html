@@ -534,10 +534,17 @@
 
     window.MENU_SPEC["insideout::טונה/סלמון: נא או מטוגן + 2 ירקות ושומשום"] = {
       basePrice: 43,
+      max: 2,
       options: {
         fish:  { type: 'single', items: ['טונה','סלמון'] },
         style: { type: 'single', items: ['נא','מטוגן'] }
       }
+    };
+
+    window.SAUCE_RULES = {
+      min: 3,   
+      base: 3,
+      extraPricePer: 2  
     };
   </script>
 
@@ -571,7 +578,7 @@
       r.addEventListener('change', e=>{ ORDER_STATE.mode = e.target.value; save(STATE_KEY, ORDER_STATE); renderCart(); });
     });
 
-    function cartSubtotal(){ return CART.reduce((s,i)=> s + i.price*i.qty, 0) }
+    function cartSubtotal(){ return CART.reduce((s, it) => s + lineTotal(it), 0); }
     function calcDelivery(sub){ if(ORDER_STATE.mode!=="delivery") return 0; return sub>=DELIVERY.freeOver ? 0 : DELIVERY.flatFee }
     function meetsMin(sub){ return ORDER_STATE.mode!=="delivery" || sub>=DELIVERY.minimum }
 
@@ -581,11 +588,11 @@
           <div>
             <div class="title">${it.name}</div>
             <div class="muted">${optionsText(it.options)}</div>
-            <div class="muted">${money(it.price)} ליח'</div>
+            <div class="muted">${money(it.basePrice || it.price)} ליח'</div>
           </div>
           <div class="row-actions" style="flex-direction:column;align-items:end">
             <div class="qty"><button class="dec">−</button><span>${it.qty}</span><button class="inc">+</button></div>
-            <div class="muted">${money(it.price*it.qty)}</div>
+            <div class="muted">${money(lineTotal(it))}</div>
             <div class="row-actions">
               <button class="edit-btn">ערוך</button>
               <button class="remove-btn">הסר</button>
@@ -666,6 +673,7 @@
 
     function computeUnitPrice(basePrice, specOpt, sel){
       let p = basePrice;
+
       if(specOpt?.extras?.type==="multi" && sel.extras?.length){
         p += sel.extras.length * (specOpt.extras.pricePer||0);
       }
@@ -687,8 +695,44 @@
       if(specOpt?.sirloinExtra?.type==="toggle" && sel.sirloinExtra){
         p += (specOpt.sirloinExtra.price||0);
       }
+
+      if(sel.sauces?.length){
+        const rules = window.SAUCE_RULES || {};
+        const baseCount = rules.base ?? 3;           // כמה רטבים כלולים במחיר
+        const extraPrice = rules.extraPricePer ?? 3; // מחיר לכל רוטב נוסף
+        if(sel.sauces.length > baseCount){
+          const extra = sel.sauces.length - baseCount;
+          p += extra * extraPrice;
+        }
+      }
+
       return p;
     }
+
+    function computeExtrasCharge(specOpt, sel){
+      let extra = 0;
+
+      if(specOpt?.extras?.type==="multi" && sel.extras?.length){
+        extra += sel.extras.length * (specOpt.extras.pricePer || 0);
+      }
+      if(sel.sauces?.length){
+        const rules = window.SAUCE_RULES || {};
+        const baseCount = rules.base ?? 0;
+        const extraPrice = rules.extraPricePer ?? 0;
+        if(sel.sauces.length > baseCount){
+          extra += (sel.sauces.length - baseCount) * extraPrice;
+        }
+      }
+      return extra;
+    }
+
+    function lineTotal(it){
+      const specOpt = (window.MENU_SPEC?.[`${it.section}::${it.name}`]?.options) || {};
+      const unit = it.basePrice || it.price || 0;
+      const extras = computeExtrasCharge(specOpt, it.options || {});
+      return (unit * (it.qty || 1)) + extras;
+    }
+
 
     function openModal(ctx){
       modalState = {
@@ -770,10 +814,13 @@
       const specOpt = modalState.spec?.options || {};
       const dynamic = readDynamicSelections();
       modalState.options = { ...modalState.options, ...dynamic };
-      const unit = computeUnitPrice(modalState.basePrice, specOpt, modalState.options);
-      modalState.price = unit;
-      md.price.textContent = money(unit * modalState.qty);
+      const unit = modalState.basePrice;
+      const extras = computeExtrasCharge(specOpt, modalState.options);
+      const lineTotal = (unit * modalState.qty) + extras;
+      modalState.price = lineTotal;
+      md.price.textContent = money(lineTotal);
     }
+
 
     md.qPlus.addEventListener('click', ()=>{ modalState.qty++; md.qVal.textContent=modalState.qty; updatePrice(); });
     md.qMinus.addEventListener('click', ()=>{ modalState.qty=Math.max(1,modalState.qty-1); md.qVal.textContent=modalState.qty; updatePrice(); });
@@ -809,19 +856,26 @@
     });
 
     md.sauceRow.addEventListener('click', e=>{
-      const s=e.target.closest('.sauce'); if(!s)return;
-      if(s.classList.contains('active')) s.classList.remove('active');
-      else{
-        const actives = md.sauceRow.querySelectorAll('.sauce.active').length;
-        if(actives>=3) return;
-        s.classList.add('active');
-      }
+      const s = e.target.closest('.sauce');
+      if (!s) return;
+      s.classList.toggle('active');
       updatePrice();
     });
+
+
+
 
     md.note.addEventListener('input', e=> modalState.options.note=e.target.value.trim());
 
     md.add.addEventListener('click', ()=>{
+      const specOpt = modalState.spec?.options || {};
+      for (const [key, opt] of Object.entries(specOpt)) {
+        if (opt.type === 'single' && !modalState.options[key]) {
+          alert('יש לבחור אופציה עבור "' + key + '" לפני הוספה להזמנה.');
+          return; 
+        }
+      }
+
       const displayName = modalState.ctx.mode==='add' ? modalState.ctx.base.name : modalState.ctx.item.name;
       const section     = modalState.ctx.mode==='add' ? modalState.ctx.base.section : modalState.ctx.item.section;
 
@@ -830,20 +884,23 @@
           id:`${section}__${displayName}`,
           name: displayName,
           section,
-          basePrice: modalState.basePrice,
-          price: modalState.price,
+          basePrice: modalState.basePrice, 
           qty: modalState.qty,
           options: modalState.options
         });
       }else{
         const ix=modalState.ctx.cartIndex;
-        CART[ix].qty=modalState.qty;
-        CART[ix].options=modalState.options;
-        CART[ix].price = modalState.price;
-        CART[ix].basePrice = modalState.basePrice;
+        CART[ix].qty = modalState.qty;
+        CART[ix].options = modalState.options;
+        CART[ix].basePrice = modalState.basePrice; 
       }
-      save(STORAGE_KEY,CART); closeModal(); renderCart(); openCart();
+
+      save(STORAGE_KEY,CART); 
+      closeModal(); 
+      renderCart(); 
+      openCart();
     });
+
 
     md.cancel.addEventListener('click', closeModal);
     md.close.addEventListener('click', closeModal);
