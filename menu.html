@@ -325,7 +325,7 @@
           <div class="menu-title">NINE סושי פוטומאקי</div>
           <div class="menu-sub">6 יח' רול רחב • אצה בחוץ</div>
           <ul class="list">
-            <li class="item"><div class="name"> טונה/סלמון: נא או מטוגן + 2 ירקות</div><div class="price">33 ₪</div></li>
+            <li class="item"><div class="name"> טונה/סלמון : נא/מטוגן + 2 ירקות</div><div class="price">33 ₪</div></li>
             <li class="item"><div class="name">צמחוני</div><div class="price">28 ₪</div></li>
           </ul>
         </article>
@@ -516,15 +516,29 @@
 
   <script src="menu-data.js"></script>
 
-  <!-- 🔧 חדש: הגדרת SPEC לגיוזה כדי שהמודל ידע להציג מילויים -->
   <script>
     window.MENU_SPEC = window.MENU_SPEC || {};
     const GYOZA_FILLINGS = ['בטטה','פטריות','עוף','בקר','אווז'];
 
-    // המפתח נבנה בקוד כ: `${sectionId}::${baseName}`
     window.MENU_SPEC["starters::גיוזה דים סאם (5 יח')"]  = { basePrice: 35,  options: { fillings:{ type:'multi', items:GYOZA_FILLINGS } } };
     window.MENU_SPEC["starters::גיוזה דים סאם (10 יח')"] = { basePrice: 65,  options: { fillings:{ type:'multi', items:GYOZA_FILLINGS } } };
     window.MENU_SPEC["starters::גיוזה דים סאם (24 יח')"] = { basePrice: 132, options: { fillings:{ type:'multi', items:GYOZA_FILLINGS } } };
+
+    window.MENU_SPEC["futomaki::טונה/סלמון : נא/מטוגן + 2 ירקות"] = {
+      basePrice: 33,
+      options: {
+        fish:  { type: 'single', items: ['טונה','סלמון'] },
+        style: { type: 'single', items: ['נא','מטוגן'] }
+      }
+    };
+
+    window.MENU_SPEC["insideout::טונה/סלמון: נא או מטוגן + 2 ירקות ושומשום"] = {
+      basePrice: 43,
+      options: {
+        fish:  { type: 'single', items: ['טונה','סלמון'] },
+        style: { type: 'single', items: ['נא','מטוגן'] }
+      }
+    };
   </script>
 
   <script>
@@ -631,7 +645,6 @@
       grpRice: gid('grpRice'), riceRow: gid('riceRow'),
       grpVeg: gid('grpVeg'),   vegRow: gid('vegRow'),
       grpExtras: gid('grpExtras'), extrasRow: gid('extrasRow'),
-      // 🔧 חדש:
       grpFillings: gid('grpFillings'), fillingsRow: gid('fillingsRow'),
       add: gid('mdAdd'), cancel: gid('mdCancel'), close: gid('mdClose')
     };
@@ -674,14 +687,13 @@
       if(specOpt?.sirloinExtra?.type==="toggle" && sel.sirloinExtra){
         p += (specOpt.sirloinExtra.price||0);
       }
-      // fillings ללא תוספת מחיר – אין שינוי
       return p;
     }
 
     function openModal(ctx){
       modalState = {
         ctx, qty:1, basePrice:0, price:0, spec: null,
-        options:{ fish:null, style:null, rice:null, veg:null, fillings:[], sauces:[], extras:[], note:"" } // 🔧 fillings חדש
+        options:{ fish:null, style:null, rice:null, veg:null, fillings:[], sauces:[], extras:[], note:"" } 
       };
 
       let baseName, section, basePrice;
@@ -707,21 +719,21 @@
       const showRice     = !!specOpt.rice;
       const showVeg      = !!specOpt.veg;
       const showExtras   = !!specOpt.extras;
-      const showFillings = !!specOpt.fillings;  // 🔧 חדש
+      const showFillings = !!specOpt.fillings;
 
       md.grpFish.style.display     = showFish ? "" : "none";
       md.grpStyle.style.display    = showStyle? "" : "none";
       md.grpRice.style.display     = showRice ? "" : "none";
       md.grpVeg.style.display      = showVeg ? "" : "none";
       md.grpExtras.style.display   = showExtras ? "" : "none";
-      md.grpFillings.style.display = showFillings ? "" : "none"; // 🔧
+      md.grpFillings.style.display = showFillings ? "" : "none"; 
 
       md.fishRow.innerHTML     = showFish     ? specOpt.fish.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
       md.styleRow.innerHTML    = showStyle    ? specOpt.style.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
       md.riceRow.innerHTML     = showRice     ? specOpt.rice.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
       md.vegRow.innerHTML      = showVeg      ? specOpt.veg.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
       md.extrasRow.innerHTML   = showExtras   ? specOpt.extras.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
-      md.fillingsRow.innerHTML = showFillings ? specOpt.fillings.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : ""; // 🔧
+      md.fillingsRow.innerHTML = showFillings ? specOpt.fillings.items.map(v=>`<button class="chip" data-value="${v}">${v}</button>`).join('') : "";
 
       if(modalState.options.fish)  md.fishRow .querySelectorAll('.chip').forEach(c=>{ if(c.dataset.value===modalState.options.fish) c.classList.add('active') });
       if(modalState.options.style) md.styleRow.querySelectorAll('.chip').forEach(c=>{ if(c.dataset.value===modalState.options.style) c.classList.add('active') });
@@ -730,7 +742,7 @@
       if(modalState.options.extras?.length){
         md.extrasRow.querySelectorAll('.chip').forEach(c=>{ if(modalState.options.extras.includes(c.dataset.value)) c.classList.add('active') });
       }
-      if(modalState.options.fillings?.length){ // 🔧
+      if(modalState.options.fillings?.length){ 
         md.fillingsRow.querySelectorAll('.chip').forEach(c=>{ if(modalState.options.fillings.includes(c.dataset.value)) c.classList.add('active') });
       }
 
@@ -751,7 +763,7 @@
     function readDynamicSelections(){
       const sauces   = [...md.sauceRow.querySelectorAll('.sauce.active')].map(x=>x.dataset.value);
       const extras   = [...md.extrasRow.querySelectorAll('.chip.active')].map(x=>x.dataset.value);
-      const fillings = [...md.fillingsRow.querySelectorAll('.chip.active')].map(x=>x.dataset.value); // 🔧
+      const fillings = [...md.fillingsRow.querySelectorAll('.chip.active')].map(x=>x.dataset.value);
       return { sauces, extras, fillings };
     }
     function updatePrice(){
