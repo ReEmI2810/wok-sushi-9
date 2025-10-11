@@ -36,13 +36,14 @@
     .btn{ width:100%; background:#ffd54a; color:#000; font-weight:800; border:none; border-radius:14px; padding:14px; cursor:pointer; margin-top:10px }
     .back{ display:inline-block; margin:0 0 8px; color:#ffd54a; text-decoration:none; font-weight:700 }
     .badge{ display:inline-block; background:#222226; border:1px solid #2a2a2f; border-radius:999px; padding:2px 10px; margin-inline-start:8px }
-    .radio-row{ display:flex; gap:10px; flex-wrap:wrap }
-    .radio-pill{ display:flex; align-items:center; gap:8px; padding:8px 12px; background:#0f0f10; border:1px solid #222226; border-radius:999px; cursor:pointer; }
     .hint{ font-size:.92rem; color:#c9c9cc; margin-top:6px }
     .danger{ color:#ff6b6b }
     .ok{ color:#8ce99a }
     .sep{ height:1px; background:#222226; margin:10px 0 }
     .footer{ padding:16px 22px; text-align:center; color:#d0d0d3; background:#0c0c0d; border-top:1px solid #17171b; border-radius:0 0 38px 38px }
+
+    /* תגית מצב "תשלום בסניף" */
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #222226;background:#0f0f10;border-radius:999px;font-weight:700}
   </style>
 </head>
 <body>
@@ -53,19 +54,19 @@
     </header>
 
     <section class="page-head">
-      <h1>Checkout — תשלום ואישור הזמנה</h1>
+      <h1>Checkout — אישור הזמנה</h1>
       <a class="back" href="index.html">← חזרה לתפריט</a>
     </section>
 
     <section class="wrap">
       <!-- פרטי לקוח -->
       <form id="checkoutForm" class="card" novalidate>
-        <h3>פרטי לקוח ואיסוף/משלוח</h3>
+        <h3>פרטי לקוח</h3>
 
-        <div class="radio-row" style="margin-bottom:6px">
-          <label class="radio-pill"><input type="radio" name="mode" value="pickup"> איסוף עצמי</label>
-          <label class="radio-pill"><input type="radio" name="mode" value="delivery"> משלוח</label>
-          <span id="minMsg" class="hint"></span>
+        <!-- מצב קבוע: איסוף עצמי + תשלום בסניף -->
+        <div class="hint" style="margin-bottom:8px">
+          <span class="pill">איסוף עצמי בלבד</span>
+          <span class="pill">תשלום מתבצע בסניף</span>
         </div>
 
         <div class="row">
@@ -82,35 +83,12 @@
         <label>אימייל לקבלת קבלה</label>
         <input type="email" name="email" required placeholder="name@example.com">
 
-        <div id="addrWrap" style="display:none">
-          <div class="row">
-            <div>
-              <label>עיר</label>
-              <input name="city" placeholder="לדוגמה: באר שבע">
-            </div>
-            <div>
-              <label>רחוב ומספר</label>
-              <input name="street" placeholder="רח׳… 10">
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label>קומה / דירה</label>
-              <input name="apt" placeholder="(לא חובה)">
-            </div>
-            <div>
-              <label>הערות לשליח</label>
-              <input name="courierNote" placeholder="שער, קוד, כניסה…">
-            </div>
-          </div>
-        </div>
-
         <label>הערות להזמנה</label>
         <textarea name="notes" rows="2" placeholder="ללא ג׳ינג׳ר/וסאבי? אלרגיות?"></textarea>
 
         <div class="sep"></div>
         <label><input type="checkbox" id="agree" required> מאשר/ת את פרטי ההזמנה ותנאי השירות</label>
-        <button class="btn" type="submit">לתשלום מאובטח</button>
+        <button class="btn" type="submit">אישור הזמנה — תשלום בסניף</button>
         <div id="formMsg" class="hint"></div>
 
         <!-- יישלח לשרת -->
@@ -124,9 +102,8 @@
         <div id="orderList"></div>
         <div class="sep"></div>
         <div class="sum-row"><span>סכום ביניים</span><span id="sumSub">₪0</span></div>
-        <div class="sum-row" id="sumDeliveryRow" style="display:none"><span>דמי משלוח</span><span id="sumDelivery">₪0</span></div>
-        <div class="sum-row total"><span>לתשלום</span><span id="sumGrand">₪0</span></div>
-        <div class="hint" id="freeShipHint" style="display:none"></div>
+        <!-- אין משלוח, אין דמי משלוח -->
+        <div class="sum-row total"><span>לתשלום בסניף</span><span id="sumGrand">₪0</span></div>
       </aside>
     </section>
 
@@ -134,9 +111,8 @@
   </main>
 
   <script>
-    // ==== קונפיג ====
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzP0-N9mFWYleC1sTZy_LDoyrvGgRx08VClUV9Z2qbdqh7LBMLMCdjdc_PqdUfH6MXo_w/exec';
-    const DELIVERY = { flatFee: 15, freeOver: 180, minimum: 70 };
+    // ==== קונפיג לשרת שלך (נשאר כמו שהיה) ====
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyPTiAz_E281emaN6rMMcsmC9w56-H2X3sBpl0prGHh4e9-sAZLeNRTfQCjWJVAcwqtBg/exec';
 
     // ==== טעינת עגלה מהמסך הקודם ====
     const payload = JSON.parse(localStorage.getItem("CHECKOUT_PAYLOAD_V1") || "null");
@@ -149,33 +125,16 @@
       orderList: document.getElementById('orderList'),
       badge: document.getElementById('badgeCount'),
       sub: document.getElementById('sumSub'),
-      dRow: document.getElementById('sumDeliveryRow'),
-      dFee: document.getElementById('sumDelivery'),
       grand: document.getElementById('sumGrand'),
-      hint: document.getElementById('freeShipHint'),
-      minMsg: document.getElementById('minMsg'),
       form: document.getElementById('checkoutForm'),
       cartJson: document.getElementById('cartJson'),
-      addrWrap: document.getElementById('addrWrap'),
       agree: document.getElementById('agree'),
       msg: document.getElementById('formMsg')
     };
 
     const money = n => "₪" + (Number(n)||0).toLocaleString('he-IL',{maximumFractionDigits:0});
     const items = payload.items;
-    let mode = (payload.mode || "pickup"); // pickup | delivery
-
-    // מגדיר מצב רדיו
-    document.querySelectorAll('input[name="mode"]').forEach(r=>{
-      r.checked = r.value === mode;
-      r.addEventListener('change', e => { mode = e.target.value; renderSummary(); toggleAddress(); });
-    });
-
-    function toggleAddress(){
-      const isDel = mode==="delivery";
-      els.addrWrap.style.display = isDel ? "" : "none";
-      els.minMsg.innerHTML = isDel ? `מינימום משלוח: <b>${money(DELIVERY.minimum)}</b>` : '';
-    }
+    const mode = "pickup"; // קבוע — אין משלוח
 
     function renderSummary(){
       const qty = items.reduce((s,i)=>s+i.qty,0);
@@ -192,21 +151,10 @@
       `).join('');
 
       const sub = items.reduce((s,i)=> s + (i.price*i.qty), 0);
-      const dFee = mode==="delivery" ? (sub>=DELIVERY.freeOver ? 0 : DELIVERY.flatFee) : 0;
-      const grand = sub + dFee;
+      const grand = sub;
 
       els.sub.textContent = money(sub);
-      els.dRow.style.display = mode==="delivery" ? "" : "none";
-      els.dFee.textContent = money(dFee);
       els.grand.textContent = money(grand);
-
-      if(mode==="delivery"){
-        const remain = Math.max(0, DELIVERY.freeOver - sub);
-        els.hint.style.display = remain>0 ? "" : "none";
-        els.hint.textContent = remain>0 ? `חסר לך ${money(remain)} למשלוח חינם` : "משלוח חינם!";
-      }else{
-        els.hint.style.display = "none";
-      }
     }
 
     function optionsText(opt){
@@ -222,68 +170,75 @@
       return a.join(" · ");
     }
 
-    toggleAddress();
     renderSummary();
 
-    // שליחת הזמנה ל-Apps Script
+    function showSuccess(orderId, amount){
+      const main = document.querySelector('main.shell');
+      main.innerHTML = `
+        <section class="page-head">
+          <h1>הזמנה נקלטה ✔</h1>
+          <a class="back" href="index.html">← חזרה לתפריט</a>
+        </section>
+        <section class="wrap">
+          <div class="card">
+            <h3>תודה! ההזמנה שלך נוצרה</h3>
+            <p class="hint">מספר הזמנה: <b>${orderId}</b></p>
+            <p>סכום לתשלום בסניף: <b>${money(amount)}</b></p>
+            <p class="muted">התשלום יבוצע פיזית בקופה בעת איסוף ההזמנה.</p>
+            <div class="sep"></div>
+            <a class="btn" href="index.html">חזרה לתפריט</a>
+          </div>
+          <aside class="card">
+            <h3>סיכום הזמנה</h3>
+            <div>${document.getElementById('orderList').innerHTML}</div>
+            <div class="sep"></div>
+            <div class="sum-row"><span>סכום ביניים</span><span>${document.getElementById('sumSub').textContent}</span></div>
+            <div class="sum-row total"><span>לתשלום בסניף</span><span>${document.getElementById('sumGrand').textContent}</span></div>
+          </aside>
+        </section>
+        <footer class="footer">© 2024 WOK SUSHI 9</footer>
+      `;
+    }
+
     els.form.addEventListener('submit', async (e)=>{
       e.preventDefault();
       els.msg.textContent = "";
 
-      // ולידציה מינימום משלוח
-      const sub = items.reduce((s,i)=> s + (i.price*i.qty), 0);
-      if(mode==="delivery" && sub < DELIVERY.minimum){
-        els.msg.innerHTML = `<span class="danger">מינימום הזמנה למשלוח הוא ${money(DELIVERY.minimum)}.</span>`;
-        return;
-      }
       if(!els.agree.checked){
         els.msg.innerHTML = `<span class="danger">יש לאשר את תנאי השירות.</span>`;
         return;
       }
 
-      const fd = new FormData(els.form);
-      // מרכיב אובייקט עגלה מלא לשרת
+      const sub = items.reduce((s,i)=> s + (i.price*i.qty), 0);
+
       const orderCart = {
         items,
         currency: 'ILS',
-        delivery: { mode, fee: (mode==="delivery" ? (sub>=DELIVERY.freeOver ? 0 : DELIVERY.flatFee) : 0) },
+        delivery: { mode, fee: 0 },
+        payment: { method: 'in_store', status: 'pending' } // תשלום בסניף
       };
-
-      // כתובת למשלוח (אם צריך)
-      if(mode==="delivery"){
-        orderCart.address = {
-          city:   els.form.city.value.trim(),
-          street: els.form.street.value.trim(),
-          apt:    els.form.apt.value.trim(),
-          note:   els.form.courierNote.value.trim()
-        };
-      }
 
       els.cartJson.value = JSON.stringify(orderCart);
 
-      // UI
+      const fd = new FormData(els.form);
+
       const btn = els.form.querySelector('button[type="submit"]');
       const old = btn.textContent; btn.disabled = true; btn.textContent = "יוצר הזמנה…";
 
       try{
         const res = await fetch(SCRIPT_URL, { method:'POST', body: fd });
-        const data = await res.json(); // { ok, order_id, amount, pay_url? , error? }
+        const data = await res.json(); // צפוי: { ok, order_id, amount, error? }
 
         if(!data.ok){
           throw new Error(data.error || 'שגיאה');
         }
 
-        // שמור לזיכרון לשלב התשלום
+        // שמירה מקומית במידה וצריך
         localStorage.setItem("ORDER_ID", data.order_id);
-        localStorage.setItem("ORDER_AMOUNT", String(data.amount));
+        localStorage.setItem("ORDER_AMOUNT", String(data.amount ?? sub));
 
-        // ניתוב לתשלום
-        if(data.pay_url){
-          location.href = data.pay_url; // ספק סליקה החזיר קישור
-        }else{
-          // סימולציית תשלום פנימית
-          location.href = `pay.html?order_id=${encodeURIComponent(data.order_id)}&amount=${encodeURIComponent(data.amount)}`;
-        }
+        // אין ניתוב לסליקה — מציגים מסך הצלחה
+        showSuccess(data.order_id, data.amount ?? sub);
 
       }catch(err){
         console.error(err);
