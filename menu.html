@@ -18,9 +18,18 @@
 
     .shell{ max-width:1060px; margin:28px auto; background:var(--bg); border-radius:38px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.35); border:1px solid #1b1b1f; }
     .nav{ display:flex;align-items:center;justify-content:space-between; padding:22px 26px;background:#0c0c0d;border-bottom:1px solid #17171b; }
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:26px}
-    .brand .logo{ width:34px;height:22px;border-radius:999px 999px 8px 8px; background:linear-gradient(#fefefe,#f0f0f0); position:relative;box-shadow:0 2px 0 rgba(0,0,0,.35) inset; }
-    .brand .logo:after{ content:"";position:absolute;left:4px;right:4px;bottom:-6px;height:8px;background:#e4482f;border-radius:10px; }
+    .site-header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 18px; background: var(--panel, #0f0f10);
+    }
+    .logo-link { display:inline-flex; align-items:center; text-decoration:none; }
+    .site-logo{
+      display:block;
+      max-height: 56px;   
+      width:auto;      
+      object-fit: contain;  
+      image-rendering: auto;
+    }
     .links a{color:#e9e9ea;text-decoration:none;font-weight:700;margin-left:26px}
     .links a:hover{opacity:.85}
 
@@ -121,7 +130,11 @@
 <body>
   <main class="shell">
     <header class="nav">
-      <div class="brand"><div class="logo" aria-hidden="true"></div></div>
+      <div class="brand">
+        <a href="/" class="logo-link" aria-label="WOK SUSHI 9 — דף הבית">
+          <img src="./logo.png" alt="WOK SUSHI 9" class="site-logo">
+        </a>
+      </div>
       <nav class="links" aria-label="Main">
         <a href="index.html">ראשי</a>
         <a href="about.html" aria-current="page">עלינו</a>
@@ -155,122 +168,7 @@
     <section class="menu-wrap">
       <div class="menu-grid">
 
-        <!-- VEG Maki -->
-        <article id="maki-veg" class="menu-card">
-          <div class="menu-title">NINE סושי מאקי — VEG</div>
-          <div class="menu-sub"></div>
-          <ul class="list">
-            <li class="item"><div class="name">8 יח' • אצה בחוץ</div><div class="price">23 ₪</div></li>
-          </ul>
-        </article>
-
-        <!-- Fish Maki -->
-        <article id="maki-fish" class="menu-card">
-          <div class="menu-title">NINE סושי מאקי</div>
-          <ul class="list">
-            <li class="item"><div class="name">מאקי סלמון</div><div class="price">27 ₪</div></li>
-            <li class="item"><div class="name">מאקי טונה</div><div class="price">28 ₪</div></li>
-          </ul>
-        </article>
-
-        <!-- Futomaki -->
-        <article id="futomaki" class="menu-card">
-          <div class="menu-title">NINE סושי פוטומאקי</div>
-          <div class="menu-sub">6 יח' רול רחב • אצה בחוץ</div>
-          <ul class="list">
-            <li class="item"><div class="name"> טונה/סלמון: נא או מטוגן + 2 ירקות</div><div class="price">33 ₪</div></li>
-            <li class="item"><div class="name">צמחוני</div><div class="price">28 ₪</div></li>
-          </ul>
-        </article>
-
-        <!-- Inside Out -->
-        <article id="insideout" class="menu-card">
-          <div class="menu-title">NINE סושי Insideout 1/0</div>
-          <div class="menu-sub">8 יח' רול רחב עטוף באורז + שומשום </div>
-          <ul class="list">
-            <li class="item"><div class="name"> טונה/סלמון: נא או מטוגן + 2 ירקות ושומשום</div><div class="price">43 ₪</div></li>
-            <li class="item"><div class="name">צמחוני</div><div class="price">38 ₪</div></li>
-          </ul>
-        </article>
-
-        <!-- Nigiri -->
-        <article id="nigiri" class="menu-card">
-          <div class="menu-title">NINE סושי ניגירי</div>
-          <ul class="list">
-            <li class="item"><div class="name">2 אצבעות אורז בציפוי טונה / סלמון</div><div class="price">22 ₪</div></li>
-            <li class="item"><div class="name">(VEG) 2 אצבעות אורז בציפוי טמגו / אבוקדו</div><div class="price">19 ₪</div></li>
-          </ul>
-        </article>
-
-        <!-- Combos -->
-        <article id="combos" class="menu-card">
-          <div class="menu-title">NINE קומבינציות</div>
-          <ul class="list">
-            <li class="item"><div class="name">צמחונית — 18 יח'</div><div class="price">79 ₪</div></li>
-            <li class="item desc">8 מאקי צמחוני · 8 ספיישל VEG · 2 ניגירי אבוקדו/טמגו</li>
-            <li class="item"><div class="name">סלמון — 22 יח'</div><div class="price">97 ₪</div></li>
-            <li class="item desc">8 מאקי סלמון · 8 פוטומאקי סלמון/אבוקדו/בטטה · 4 סושי סנדוויץ' סלמון · 2 ניגירי סלמון</li>
-            <li class="item"><div class="name">טונה — 26 יח'</div><div class="price">112 ₪</div></li>
-            <li class="item desc">8 מאקי טונה · 8 פוטומאקי טונה/מלפפון/אבוקדו · 8 ספיישל טונה · 2 ניגירי טונה</li>
-            <li class="item"><div class="name">זוגית — 34 יח'</div><div class="price">169 ₪</div></li>
-            <li class="item desc">8 מאקי סלמון · 8 ספיישל מיקס · 6 פוטומאקי טונה/גזר/מלפפון · 8 פוטומאקי סלמון/אבוקדו/בטטה · 2 ניגירי סלמון · 2 ניגירי טונה</li>
-          </ul>
-        </article>
-
-        <!-- Party Trays -->
-        <article id="party" class="menu-card">
-          <div class="menu-title">מגשי מסיבה ספיישל</div>
-          <ul class="list">
-            <li class="item"><div class="name">80 יח' – 5 ספיישל סלמון + 3 ספיישל טונה</div><div class="price">239 ₪</div></li>
-            <li class="item"><div class="name">מגש צמחוני (80 יח')</div><div class="price">199 ₪</div></li>
-            <li class="item"><div class="name">מגש ספיישל צמחוני (80 יח')</div><div class="price">349 ₪</div></li>
-            <li class="item"><div class="name">מגש ספיישל דגים (80 יח')</div><div class="price">389 ₪</div></li>
-          </ul>
-        </article>
-
-        <!-- Specials -->
-        <article id="specials" class="menu-card highlight">
-          <div class="menu-title">NINE ספיישלים</div>
-          <ul class="list">
-            <li class="item"><div class="name">ספיישל MIX</div><div class="price">53 ₪</div><div class="desc">סלמון אפוי, אבוקדו, בטטה וקנפיו בציפוי סלמון וטונה אדומה</div></li>
-            <li class="item"><div class="name">ספיישל VEG אבוקדו</div><div class="price">41 ₪</div><div class="desc">אבוקדו, טמגו, גזר ושיטאקי בציפוי אבוקדו</div></li>
-            <li class="item"><div class="name">סנדוויץ' טונה</div><div class="price">47 ₪</div><div class="desc">טונה, אבוקדו ובצל ירוק בציפוי שומשום</div></li>
-            <li class="item"><div class="name">ספיישל סלמון</div><div class="price">53 ₪</div><div class="desc">סלמון נא, אבוקדו, בטטה, גזר ועירית בציפוי סלמון ברוטב ספייסי-מיונז וטריאקי</div></li>
-
-            <li class="item">
-              <div class="name">סושי מטוגן — דג</div>
-              <div class="price">49 ₪</div>
-              <div class="desc">סלמון/טונה, אבוקדו ובטטה</div>
-            </li>
-
-            <li class="item">
-              <div class="name">סושי מטוגן — צמחוני</div>
-              <div class="price">47 ₪</div>
-              <div class="desc">אבוקדו ובטטה</div>
-            </li>
-
-            <li class="item"><div class="name">ספיישל טונה</div><div class="price">53 ₪</div><div class="desc">טונה אדומה, מלפפון, אבוקדו, עירית בציפוי טונה אדומה ומיונז-טריאקי</div></li>
-            <li class="item"><div class="name">ספיישל VEG בטטה</div><div class="price">41 ₪</div><div class="desc">בטטה, קנפיו, טמגו — בציפוי בטטה</div></li>
-            <li class="item"><div class="name">סנדוויץ' סלמון</div><div class="price">44 ₪</div><div class="desc">סלמון, אבוקדו ובצל ירוק בציפוי שומשום</div></li>
-            <li class="item"><div class="name">ספיישל VEG טמגו</div><div class="price">41 ₪</div><div class="desc">מלפפון, גזר, אבוקדו בציפוי טמגו</div></li>
-            <li class="item"><div class="name">סנדוויץ' צמחוני</div><div class="price">41 ₪</div><div class="desc">בטטה, אבוקדו, טמגו בציפוי שומשום — אפשר מטוגן +5 ₪</div></li>
-          </ul>
-        </article>
-
-        <!-- Salads -->
-        <article id="salads" class="menu-card">
-          <div class="menu-title">NINE סלטים</div>
-          <div class="menu-sub">מוגש עם 4 יח' סושי צמחוני לבחירת השף</div>
-          <ul class="list">
-            <li class="item"><div class="name">השוק</div><div class="price">39 ₪</div><div class="desc">ירקות לפי בחירת השף, קשיו ואגוזים</div></li>
-            <li class="item"><div class="name">PAPAYA חריף</div><div class="price">46 ₪</div><div class="desc">פפאייה, שרי, גזר, פלפלים חריפים, בצל ירוק, נבטים ובוטנים — חריף במיוחד</div></li>
-            <li class="item"><div class="name">AMIT</div><div class="price">46 ₪</div><div class="desc">מלפפון, כרוב לבן, גזר, בצל ירוק, אטריות ביצים, בוטנים, נבטים ופלפלים ברוטב יושו</div></li>
-            <li class="item"><div class="name">YELLOW TOFU</div><div class="price">46 ₪</div><div class="desc">כרוב לבן, כוסברה, מלפפון, גזר, בצל ירוק, טופו מטוגן ונבטים — רוטב שום תאילנדי</div></li>
-            <li class="item"><div class="name">TOMATO</div><div class="price">46 ₪</div><div class="desc">עלי בייבי, חסה, מלפפון, גמבה, עגבניות שרי (אדום/צהוב) ושרי ספרדי, כרוב, גזר, נבטים, פטריות, קשיו ואגוזים — ויניגרט הדרים אסייתי</div></li>
-          </ul>
-        </article>
-
-        <!-- STARTERS (with gyoza checkboxes in list itself – יישאר; המודל יטפל בבחירה) -->
+        <!-- ראשונות -->
         <article id="starters" class="menu-card">
           <div class="menu-title">ראשונות</div>
           <ul class="list">
@@ -318,47 +216,7 @@
           </ul>
         </article>
 
-        <!-- Rice Mains (קיים פעמיים אצלך; השארתי את הגרסה המלאה עם התיאור) -->
-        <article id="rice" class="menu-card">
-          <div class="menu-title"> עיקריות אורז</div>
-          <div class="menu-sub">כל המנות מוגשות עם אורז מאודה • 53 ₪</div>
-          <ul class="list">
-            <li class="item"><div class="name">שניצל אורז יפני</div><div class="price">53 ₪</div></li>
-            <li class="item desc">אפשרות לקבל את השניצל מוקפץ עם ירקות.</li>
-
-            <li class="item"><div class="name">עוף חמוץ מתוק</div><div class="price">53 ₪</div></li>
-            <li class="item desc">עוף בטמפורה, פלפלים, בצל לבן, אננס, רוטב צ'ילי חמוץ-מתוק.</li>
-
-            <li class="item"><div class="name">עוף בקארי אדום פיקנטי</div><div class="price">53 ₪</div></li>
-            <li class="item desc">פלפל אדום, פטריות, גזר, בצל לבן ובצל ירוק מלמעלה.</li>
-
-            <li class="item"><div class="name">ביף ריס</div><div class="price">53 ₪</div></li>
-            <li class="item desc">רצועות בקר עם בצל לבן, בזיליקום, פלפל אדום, פטריות ובטטה ברוטב טריאקי־ג'ינג'ר־שום.</li>
-          </ul>
-        </article>
-
-        <article id="soups" class="menu-card">
-          <div class="menu-title"> מרקים</div>
-
-          <div class="subhead">מרק טום יאם</div>
-          <ul class="list">
-            <li class="item"><div class="name">צמחוני</div><div class="price">44 ₪</div></li>
-            <li class="item"><div class="name">טופו</div><div class="price">49 ₪</div></li>
-            <li class="item"><div class="name">עוף</div><div class="price">49 ₪</div></li>
-            <li class="item"><div class="name">בקר</div><div class="price">51 ₪</div></li>
-            <li class="item desc">מרק תאילנדי עם ירקות ואטריות אורז, חריפות עדינה.</li>
-          </ul>
-
-          <div class="subhead" style="margin-top:14px">KOREN SOUP</div>
-          <ul class="list">
-            <li class="item"><div class="name"> צמחוני</div><div class="price">44 ₪</div></li>
-            <li class="item"><div class="name"> טופו</div><div class="price">49 ₪</div></li>
-            <li class="item"><div class="name"> עוף</div><div class="price">49 ₪</div></li>
-            <li class="item"><div class="name"> בקר</div><div class="price">51 ₪</div></li>
-            <li class="item desc">מרק קוריאני עשיר עם ירקות טריים ואטריות אורז.</li>
-          </ul>
-        </article>
-
+        <!-- נודלס & פאד תאי -->
         <article id="noodles" class="menu-card">
           <div class="menu-title"> נודלס & פאד תאי</div>
 
@@ -393,6 +251,49 @@
           </ul>
         </article>
 
+        <!-- אורז -->
+        <article id="rice" class="menu-card">
+          <div class="menu-title"> עיקריות אורז</div>
+          <div class="menu-sub">כל המנות מוגשות עם אורז מאודה • 53 ₪</div>
+          <ul class="list">
+            <li class="item"><div class="name">שניצל אורז יפני</div><div class="price">53 ₪</div></li>
+            <li class="item desc">אפשרות לקבל את השניצל מוקפץ עם ירקות.</li>
+
+            <li class="item"><div class="name">עוף חמוץ מתוק</div><div class="price">53 ₪</div></li>
+            <li class="item desc">עוף בטמפורה, פלפלים, בצל לבן, אננס, רוטב צ'ילי חמוץ-מתוק.</li>
+
+            <li class="item"><div class="name">עוף בקארי אדום פיקנטי</div><div class="price">53 ₪</div></li>
+            <li class="item desc">פלפל אדום, פטריות, גזר, בצל לבן ובצל ירוק מלמעלה.</li>
+
+            <li class="item"><div class="name">ביף ריס</div><div class="price">53 ₪</div></li>
+            <li class="item desc">רצועות בקר עם בצל לבן, בזיליקום, פלפל אדום, פטריות ובטטה ברוטב טריאקי־ג'ינג'ר־שום.</li>
+          </ul>
+        </article>
+
+        <!-- מרקים -->
+        <article id="soups" class="menu-card">
+          <div class="menu-title"> מרקים</div>
+
+          <div class="subhead">מרק טום יאם</div>
+          <ul class="list">
+            <li class="item"><div class="name">צמחוני</div><div class="price">44 ₪</div></li>
+            <li class="item"><div class="name">טופו</div><div class="price">49 ₪</div></li>
+            <li class="item"><div class="name">עוף</div><div class="price">49 ₪</div></li>
+            <li class="item"><div class="name">בקר</div><div class="price">51 ₪</div></li>
+            <li class="item desc">מרק תאילנדי עם ירקות ואטריות אורז, חריפות עדינה.</li>
+          </ul>
+
+          <div class="subhead" style="margin-top:14px">KOREN SOUP</div>
+          <ul class="list">
+            <li class="item"><div class="name"> צמחוני</div><div class="price">44 ₪</div></li>
+            <li class="item"><div class="name"> טופו</div><div class="price">49 ₪</div></li>
+            <li class="item"><div class="name"> עוף</div><div class="price">49 ₪</div></li>
+            <li class="item"><div class="name"> בקר</div><div class="price">51 ₪</div></li>
+            <li class="item desc">מרק קוריאני עשיר עם ירקות טריים ואטריות אורז.</li>
+          </ul>
+        </article>
+
+        <!-- עסקית -->
         <article id="business" class="menu-card highlight">
           <div class="menu-title">עסקית</div>
           <div class="menu-sub">א׳–ה׳ עד 17:00 • 70 ₪</div>
@@ -401,6 +302,122 @@
           </ul>
         </article>
 
+        <!-- סושי VEG -->
+        <article id="maki-veg" class="menu-card">
+          <div class="menu-title">NINE סושי מאקי — VEG</div>
+          <div class="menu-sub"></div>
+          <ul class="list">
+            <li class="item"><div class="name">8 יח' • אצה בחוץ • אופציה לתוספות מיוחדות</div><div class="price">23 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- סושי דגים -->
+        <article id="maki-fish" class="menu-card">
+          <div class="menu-title">NINE סושי מאקי</div>
+          <ul class="list">
+            <li class="item"><div class="name">מאקי סלמון</div><div class="price">27 ₪</div></li>
+            <li class="item"><div class="name">מאקי טונה</div><div class="price">28 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- סושי פוטומאקי -->
+        <article id="futomaki" class="menu-card">
+          <div class="menu-title">NINE סושי פוטומאקי</div>
+          <div class="menu-sub">6 יח' רול רחב • אצה בחוץ</div>
+          <ul class="list">
+            <li class="item"><div class="name"> טונה/סלמון: נא או מטוגן + 2 ירקות</div><div class="price">33 ₪</div></li>
+            <li class="item"><div class="name">צמחוני</div><div class="price">28 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- Inside/Out -->
+        <article id="insideout" class="menu-card">
+          <div class="menu-title">NINE סושי Insideout 1/0</div>
+          <div class="menu-sub">8 יח' רול רחב עטוף באורז + שומשום </div>
+          <ul class="list">
+            <li class="item"><div class="name"> טונה/סלמון: נא או מטוגן + 2 ירקות ושומשום</div><div class="price">43 ₪</div></li>
+            <li class="item"><div class="name">צמחוני</div><div class="price">38 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- ניגירי -->
+        <article id="nigiri" class="menu-card">
+          <div class="menu-title">NINE סושי ניגירי</div>
+          <ul class="list">
+            <li class="item"><div class="name">2 אצבעות אורז בציפוי טונה / סלמון</div><div class="price">22 ₪</div></li>
+            <li class="item"><div class="name">(VEG) 2 אצבעות אורז בציפוי טמגו / אבוקדו</div><div class="price">19 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- מיוחדות -->
+        <article id="specials" class="menu-card highlight">
+          <div class="menu-title">NINE ספיישלים</div>
+          <ul class="list">
+            <li class="item"><div class="name">ספיישל MIX</div><div class="price">53 ₪</div><div class="desc">סלמון אפוי, אבוקדו, בטטה וקנפיו בציפוי סלמון וטונה אדומה</div></li>
+            <li class="item"><div class="name">ספיישל VEG אבוקדו</div><div class="price">41 ₪</div><div class="desc">אבוקדו, טמגו, גזר פטריות ושיטאקי בציפוי אבוקדו</div></li>
+            <li class="item"><div class="name">סנדוויץ' טונה</div><div class="price">47 ₪</div><div class="desc">טונה, אבוקדו ובצל ירוק בציפוי שומשום</div></li>
+            <li class="item"><div class="name">ספיישל סלמון</div><div class="price">53 ₪</div><div class="desc">סלמון נא, אבוקדו, בטטה, גזר ועירית בציפוי סלמון ברוטב ספייסי-מיונז וטריאקי</div></li>
+
+            <li class="item">
+              <div class="name">סושי מטוגן — דג</div>
+              <div class="price">49 ₪</div>
+              <div class="desc">סלמון/טונה, אבוקדו ובטטה</div>
+            </li>
+
+            <li class="item">
+              <div class="name">סושי מטוגן — צמחוני</div>
+              <div class="price">47 ₪</div>
+              <div class="desc">אבוקדו ובטטה</div>
+            </li>
+
+            <li class="item"><div class="name">ספיישל טונה</div><div class="price">53 ₪</div><div class="desc">טונה אדומה, מלפפון, אבוקדו, עירית בציפוי טונה אדומה ומיונז-טריאקי</div></li>
+            <li class="item"><div class="name">ספיישל VEG בטטה</div><div class="price">41 ₪</div><div class="desc">בטטה, קנפיו, טמגו — בציפוי בטטה</div></li>
+            <li class="item"><div class="name">סנדוויץ' סלמון</div><div class="price">44 ₪</div><div class="desc">סלמון, אבוקדו ובצל ירוק בציפוי שומשום</div></li>
+            <li class="item"><div class="name">ספיישל VEG טמגו</div><div class="price">41 ₪</div><div class="desc">מלפפון, גזר, אבוקדו בציפוי טמגו</div></li>
+            <li class="item"><div class="name">סנדוויץ' צמחוני</div><div class="price">41 ₪</div><div class="desc">בטטה, אבוקדו, טמגו בציפוי שומשום — אפשר מטוגן +5 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- קומבינציות -->
+        <article id="combos" class="menu-card">
+          <div class="menu-title">NINE קומבינציות</div>
+          <ul class="list">
+            <li class="item"><div class="name">צמחונית — 18 יח'</div><div class="price">79 ₪</div></li>
+            <li class="item desc">8 מאקי צמחוני · 8 VEG רול ספיישל  · 2 ניגירי אבוקדו/טמגו</li>
+            <li class="item"><div class="name">סלמון — 22 יח'</div><div class="price">97 ₪</div></li>
+            <li class="item desc">8 מאקי סלמון · 8 פוטומאקי סלמון,אבוקדו,בטטה · 4 סושי סנדוויץ' סלמון אבוקדו ובצל ירוק · 2 ניגירי סלמון</li>
+            <li class="item"><div class="name">טונה — 26 יח'</div><div class="price">112 ₪</div></li>
+            <li class="item desc">8 מאקי טונה · 8 פוטומאקי טונה,מלפפון,אבוקדו · 8 ספיישל טונה רול · 2 ניגירי טונה</li>
+            <li class="item"><div class="name">זוגית — 34 יח'</div><div class="price">169 ₪</div></li>
+            <li class="item desc">8 מאקי סלמון · 8 ספיישל מיקס רול · 6 פוטומאקי טונה,גזר,מלפפון · 8 פוטומאקי סלמון,אבוקדו,בטטה · 2 ניגירי סלמון · 2 ניגירי טונה</li>
+          </ul>
+        </article>
+
+        <!-- מגשי מסיבה -->
+        <article id="party" class="menu-card">
+          <div class="menu-title">מגשי מסיבה ספיישל</div>
+          <ul class="list">
+            <li class="item"><div class="name">מגש צמחוני (80 יח')</div><div class="price">199 ₪</div></li>
+            <li class="item"><div class="name">80 יח' – 5 ספיישל סלמון + 3 ספיישל טונה</div><div class="price">239 ₪</div></li>
+            <li class="item"><div class="name">מגש ספיישל צמחוני (80 יח')</div><div class="price">349 ₪</div></li>
+            <li class="item"><div class="name">מגש ספיישל דגים (80 יח')</div><div class="price">389 ₪</div></li>
+          </ul>
+        </article>
+
+        <!-- סלטים -->
+        <article id="salads" class="menu-card">
+          <div class="menu-title">NINE סלטים</div>
+          <div class="menu-sub">מוגש עם 4 יח' סושי צמחוני לבחירת השף</div>
+          <ul class="list">
+            <li class="item"><div class="name">השוק</div><div class="price">39 ₪</div><div class="desc">ירקות לפי בחירת השף, קשיו ואגוזים</div></li>
+            <li class="item"><div class="name">PAPAYA חריף</div><div class="price">46 ₪</div><div class="desc">פפאייה, שרי, גזר, פלפלים חריפים, בצל ירוק, נבטים ובוטנים — חריף במיוחד</div></li>
+            <li class="item"><div class="name">AMIT</div><div class="price">46 ₪</div><div class="desc">מלפפון, כרוב לבן, גזר, בצל ירוק, אטריות ביצים, בוטנים, נבטים ופלפלים ברוטב יושו</div></li>
+            <li class="item"><div class="name">YELLOW TOFU</div><div class="price">46 ₪</div><div class="desc">כרוב לבן, כוסברה, מלפפון, גזר, בצל ירוק, טופו מטוגן ונבטים — רוטב שום תאילנדי</div></li>
+            <li class="item"><div class="name">TOMATO</div><div class="price">46 ₪</div><div class="desc">עלי בייבי, חסה, מלפפון, גמבה, עגבניות שרי (אדום/צהוב) ושרי ספרדי, כרוב, גזר, נבטים, פטריות, קשיו ואגוזים — ויניגרט הדרים אסייתי</div></li>
+          </ul>
+        </article>        
+
+        <!-- שתייה  -->
         <article id="drinks" class="menu-card">
           <div class="menu-title">NINE שתייה</div>
           <ul class="list">
@@ -432,7 +449,9 @@
       <div class="ibox"><strong>שעות פעילות:</strong> א׳–ה׳ 11:00–23:00 · מוצ״ש עד 23:00</div>
       <div class="ibox"><strong>משלוחים:</strong> באר שבע והסביבה · מינימום הזמנה לפי אזור</div>
     </section>
-    <footer class="footer">© 2024 Sushi Place. All rights reserved.</footer>
+    <footer class="footer">© 2024 Sushi Place. All rights reserved.
+      <p>!!אתר בהרצה!!<!DOCTYPE html></p>
+    </footer>
   </main>
 
   <button id="cartToggle" class="cart-fab">🛒 <span id="cartBadge">0</span></button>
