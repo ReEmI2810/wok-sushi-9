@@ -8,6 +8,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap');
+    * {
+      box-sizing: border-box;
+      font-family: 'Rubik', 'Inter', system-ui, sans-serif;
+    }
+    html {
+      direction: rtl;
+      unicode-bidi: bidi-override;
+    }
+
     :root{
       --bg:#0e0e0f; --panel:#0f0f10; --muted:#b7b7b9; --white:#ffffff;
       --cta:#e4482f; --cta-hover:#d13f29; --card:#141416; --stroke:#222226; --radius:26px;
@@ -125,6 +135,35 @@
     .md-add{ background:#ffd54a; color:#000; border:none; border-radius:12px; padding:12px 16px; font-weight:800; cursor:pointer }
     .md-cancel{ background:transparent; color:#b7b7b9; border:none; cursor:pointer }
     .note{ width:100%; background:#0f0f10; color:#fff; border:1px solid #222226; border-radius:12px; padding:10px }
+
+    #toTopBtn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 99;
+      background-color: var(--cta, #e4482f);
+      color: white;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 18px;
+      border-radius: 50%;
+      font-size: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    }
+
+    #toTopBtn:hover {
+      background-color: var(--cta-hover, #d13f29);
+    }
+
+    #toTopBtn.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
   </style>
 </head>
 <body>
@@ -513,6 +552,8 @@
       <div class="md-actions"><button class="md-cancel" id="mdCancel">ביטול</button><button class="md-add" id="mdAdd">הוסף להזמנה</button></div>
     </div>
   </div>
+
+  <button id="toTopBtn" title="חזרה למעלה">↑</button>
 
   <script src="menu-data.js"></script>
 
@@ -905,6 +946,21 @@
     md.cancel.addEventListener('click', closeModal);
     md.close.addEventListener('click', closeModal);
     document.querySelector('#modalWrap .modal-bg').addEventListener('click', closeModal);
-  </script>
+
+    const toTopBtn = document.getElementById("toTopBtn");
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        toTopBtn.classList.add("show");
+      } else {
+        toTopBtn.classList.remove("show");
+      }
+    });
+
+    toTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+  </script>  
 </body>
 </html>
