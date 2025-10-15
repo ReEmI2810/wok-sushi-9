@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>נגישות</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/a11y.css">
+  <script src="/a11y.js" defer></script>
+  <style>
+    body{margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif; background:#0e0e0f; color:#fff;}
+    .wrap{max-width:800px; margin:0 auto; padding:24px;}
+    h1{margin:12px 0 20px;}
+    .panel{background:#141416; border:1px solid #222226; border-radius:16px; padding:16px; margin-bottom:16px;}
+    .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+    button, .btn{
+      padding:10px 14px; border-radius:12px; background:#222; color:#fff; border:1px solid #333; cursor:pointer;
+    }
+    button:hover{background:#2a2a2a}
+    .toggle{display:flex; align-items:center; gap:8px}
+    .toggle input{width:22px; height:22px}
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background:#222; padding:2px 6px; border-radius:6px; border:1px solid #333}
+    .muted{color:#b7b7b9; font-size:0.95em}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>הגדרות נגישות</h1>
+    <p class="muted">ההגדרות נשמרות במכשיר שלך ופועלות בכל דפי האתר.</p>
+
+    <div class="panel">
+      <h3>ניגודיות גבוהה + מסגרות צהובות</h3>
+      <label class="toggle">
+        <input type="checkbox" id="chk-contrast">
+        <span>הפעל ניגודיות גבוהה (כולל מסגרות צהובות לכל הרכיבים)</span>
+      </label>
+    </div>
+
+    <div class="panel">
+      <h3>גודל טקסט</h3>
+      <div class="row">
+        <button id="btn-dec">A−</button>
+        <button id="btn-reset">איפוס</button>
+        <button id="btn-inc">A+</button>
+        <span id="font-indicator" class="muted"></span>
+      </div>
+      <p class="muted">הגדלה/הקטנה ל-טקסט בכ-5% בכל לחיצה.</p>
+    </div>
+
+    <div class="panel">
+      <h3>סימוני קישורים ופוקוס</h3>
+      <label class="toggle">
+        <input type="checkbox" id="chk-underline">
+        <span>קו תחתון לכל הקישורים</span>
+      </label>
+      <label class="toggle">
+        <input type="checkbox" id="chk-focus">
+        <span>פוקוס מודגש (מסגרת צהובה רק כאשר רכיב בפוקוס)</span>
+      </label>
+    </div>
+  </div>
+
+  <script src="/assets/js/a11y.js" defer></script>
+  <script>
+    // סנכרון UI <-> PREFS
+    function syncUI(){
+      const p = window.A11Y.get();
+      document.getElementById('chk-contrast').checked = !!p.contrast;
+      document.getElementById('chk-underline').checked = !!p.underlineLinks;
+      document.getElementById('chk-focus').checked = !!p.focusOutline;
+      document.getElementById('font-indicator').textContent = 'גודל נוכחי: ' + Math.round(p.fontScale*100) + '%';
+    }
+
+    // אירועים
+    document.addEventListener('DOMContentLoaded', function(){
+      syncUI();
+
+      document.getElementById('chk-contrast').addEventListener('change', e => {
+        window.A11Y.set('contrast', e.target.checked);
+        syncUI();
+      });
+      document.getElementById('chk-underline').addEventListener('change', e => {
+        window.A11Y.set('underlineLinks', e.target.checked);
+        syncUI();
+      });
+      document.getElementById('chk-focus').addEventListener('change', e => {
+        window.A11Y.set('focusOutline', e.target.checked);
+        syncUI();
+      });
+
+      document.getElementById('btn-inc').addEventListener('click', ()=>{ window.A11Y.incFont(0.05); syncUI(); });
+      document.getElementById('btn-dec').addEventListener('click', ()=>{ window.A11Y.decFont(0.05); syncUI(); });
+      document.getElementById('btn-reset').addEventListener('click', ()=>{ window.A11Y.resetFont(); syncUI(); });
+    });
+  </script>
+</body>
+</html>
