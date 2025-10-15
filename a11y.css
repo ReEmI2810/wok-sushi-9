@@ -1,0 +1,43 @@
+/* בסיס משתנים */
+:root{
+  --a11y-font-scale: 1;     /* 1 = רגיל, 1.15 = +15% וכו' */
+  --a11y-focus-outline: none;
+}
+
+/* הגדלת טקסט גלובלית לכל טקסט שכיח */
+body, button, input, select, textarea {
+  font-size: calc(1rem * var(--a11y-font-scale));
+}
+h1 { font-size: calc(2rem * var(--a11y-font-scale)); }
+h2 { font-size: calc(1.75rem * var(--a11y-font-scale)); }
+h3 { font-size: calc(1.5rem * var(--a11y-font-scale)); }
+h4 { font-size: calc(1.25rem * var(--a11y-font-scale)); }
+h5 { font-size: calc(1.125rem * var(--a11y-font-scale)); }
+h6 { font-size: calc(1rem * var(--a11y-font-scale)); }
+
+/* ניגודיות גבוהה + מסגרות צהובות (כמו שביקשת) */
+html.a11y-contrast {
+  filter: none !important;
+  background:#000 !important; color:#fff !important;
+}
+html.a11y-contrast body, html.a11y-contrast * {
+  background-color: transparent !important;
+  color: #fff !important;
+}
+html.a11y-contrast * {
+  outline: 3px solid #FFD400 !important; /* מסגרת צהובה */
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border-color: #FFD400 !important;
+}
+
+/* קישור עם קו תחתון */
+html.a11y-underline-links a { text-decoration: underline !important; }
+
+/* הדגשת פוקוס ברירת מחדל (ללא ניגודיות גבוהה) */
+*:focus-visible { outline: var(--a11y-focus-outline); }
+
+/* אפשר להרחיב בהמשך:
+   html.a11y-gray { filter: grayscale(100%) !important; }
+   html.a11y-reduced-motion * { animation: none !important; transition: none !important; }
+*/
